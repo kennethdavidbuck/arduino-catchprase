@@ -36,7 +36,7 @@ class GameController {
 				isPressed = true;
 				teamOne->incrementScore();
 				view->setTeamOneScore(teamOne->getScore());
-			} else if(!teamOneScoreButtonView->isPressed()) {
+			} else if(isPressed && !teamOneScoreButtonView->isPressed()) {
 				isPressed = false;
 			}
 		}

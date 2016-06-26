@@ -8,12 +8,17 @@ class ButtonView {
 
 		ButtonView() {
 			pinMode(PIN, INPUT);
+			pullLow();
 		}
 
 		const int PIN = 2;
 
 		bool isHigh() {
 			return digitalRead(PIN) == HIGH;
+		}
+
+		void pullLow() {
+			digitalWrite(PIN, LOW);
 		}
 
 	public:
