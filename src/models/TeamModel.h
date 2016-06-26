@@ -4,6 +4,7 @@
 class TeamModel {
 
 	private:
+
 		uint8_t score = 0;
 
 	public:

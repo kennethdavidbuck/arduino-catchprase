@@ -4,6 +4,7 @@
 class ButtonView {
 
 	private:
+
 		static ButtonView *buttonInstance;
 
 		ButtonView() {
