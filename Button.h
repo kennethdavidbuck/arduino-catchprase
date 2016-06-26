@@ -2,15 +2,21 @@
 class Button {
 
 	private:
+		const int PIN = 2;
+
 		int state = LOW;
-		int pin = 2;
+
+	protected:
+		bool isHigh() {
+			return digitalRead(PIN) == HIGH;
+		}
 
 	public:
 		Button() {
-			pinMode(pin, INPUT);
+			pinMode(PIN, INPUT);
 		}
 
 		bool isPressed() {
-			return digitalRead(pin) == HIGH;
+			return isHigh();
 		}
 };
