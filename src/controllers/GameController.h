@@ -1,6 +1,6 @@
-#include "Button.h"
-#include "GameView.h"
-#include "TeamModel.h"
+#include "../views/ButtonView.h"
+#include "../views/GameView.h"
+#include "../models/TeamModel.h"
 
 class GameController {
 
