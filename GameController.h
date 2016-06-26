@@ -31,10 +31,6 @@ class GameController {
 		}
 
 		void loop() {
-			if(nextButton->isPressed()) {
-				team1->incrementScore();
-			}
-
 			view->setScores(team1->getScore(), team2->getScore());
 			view->setPhrase("Hello World!");
 		}
