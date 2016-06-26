@@ -7,8 +7,8 @@ class ButtonView {
 		static ButtonView *buttonInstance;
 
 		ButtonView() {
-			pinMode(PIN, INPUT);
 			pullLow();
+			pinMode(PIN, INPUT);
 		}
 
 		const int PIN = 2;
