@@ -19,6 +19,8 @@ class GameController {
 
 		GameView* view;
 
+		bool isPressed = true;
+
 	public:
 		GameController() {
 			// create instances
@@ -32,11 +34,19 @@ class GameController {
 			stopStartButton = new Button();
 
 			view = new GameView();
+
+			view->setPhrase("Hello World!");
 		}
 
 		void loop() {
+			if(!isPressed && nextButton->isPressed()) {
+				isPressed = true;
+				team1->incrementScore();
+			} else if(isPressed && !nextButton->isPressed()) {
+				isPressed = false;
+			}
+
 			view->setScores(team1->getScore(), team2->getScore());
-			view->setPhrase("Hello World!");
 		}
 };
 
