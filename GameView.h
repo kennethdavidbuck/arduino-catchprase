@@ -3,6 +3,7 @@
 class GameView : public LiquidCrystal {
 
 	private:
+
 		static const uint8_t ROW_COUNT = 2;
 		static const uint8_t COLUMN_COUNT = 16;
 
