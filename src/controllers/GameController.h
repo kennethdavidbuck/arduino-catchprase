@@ -35,6 +35,7 @@ class GameController {
 
 			view = new GameView();
 
+			view->setScores(team1->getScore(), team2->getScore());
 			view->setPhrase("Hello World!");
 		}
 
@@ -42,11 +43,10 @@ class GameController {
 			if(!isPressed && nextButton->isPressed()) {
 				isPressed = true;
 				team1->incrementScore();
-			} else if(isPressed && !nextButton->isPressed()) {
+				view->setTeam1Score(team1->getScore());
+			} else if(!nextButton->isPressed()) {
 				isPressed = false;
 			}
-
-			view->setScores(team1->getScore(), team2->getScore());
 		}
 };
 
