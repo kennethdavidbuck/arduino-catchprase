@@ -8,42 +8,42 @@
 class GameController {
 
 	private:
-		TeamModel* team1;
-		TeamModel* team2;
+		TeamModel* teamOne;
+		TeamModel* teamTwo;
 
 		Button* categoryButton;
 		Button* stopStartButton;
 		Button* nextButton;
-		Button* team1IncrementScoreButton;
-		Button* team2IncrementScoreButton;
+		Button* teamOneIncrementScoreButton;
+		Button* teamTwoIncrementScoreButton;
 
 		GameView* view;
 
-		bool isPressed = true;
+		bool isPressed = false;
 
 	public:
 		GameController() {
 			// create instances
-			team1 = new TeamModel();
-			team2 = new TeamModel();
+			teamOne = new TeamModel();
+			teamTwo = new TeamModel();
 
 			categoryButton = new Button();
 			nextButton = new Button();
-			team1IncrementScoreButton = new Button();
-			team2IncrementScoreButton = new Button();
+			teamOneIncrementScoreButton = new Button();
+			teamTwoIncrementScoreButton = new Button();
 			stopStartButton = new Button();
 
 			view = new GameView();
 
-			view->setScores(team1->getScore(), team2->getScore());
+			view->setScores(teamOne->getScore(), teamTwo->getScore());
 			view->setPhrase("Hello World!");
 		}
 
 		void loop() {
 			if(!isPressed && nextButton->isPressed()) {
 				isPressed = true;
-				team1->incrementScore();
-				view->setTeam1Score(team1->getScore());
+				teamOne->incrementScore();
+				view->setTeamOneScore(teamOne->getScore());
 			} else if(!nextButton->isPressed()) {
 				isPressed = false;
 			}

@@ -37,17 +37,17 @@ class GameView : public LiquidCrystal {
 			print(phrase);
 		}
 
-		void setScores(uint8_t team1Score, uint8_t team2Score) {
-			setTeam1Score(team1Score);
-			setTeam2Score(team2Score);
+		void setScores(uint8_t teamOneScore, uint8_t teamTwoScore) {
+			setTeamOneScore(teamOneScore);
+			setTeamTwoScore(teamTwoScore);
 		}
 
-		void setTeam1Score(uint8_t score) {
+		void setTeamOneScore(uint8_t score) {
 			setCursor(firstColumn(), firstRow());
 			print(score);
 		}
 
-		void setTeam2Score(uint8_t score) {
+		void setTeamTwoScore(uint8_t score) {
 			setCursor(lastColumn(), firstRow());
 			print(score);
 		}
