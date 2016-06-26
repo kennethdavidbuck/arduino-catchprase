@@ -14,8 +14,8 @@ class GameController {
 		Button* categoryButton;
 		Button* stopStartButton;
 		Button* nextButton;
-		Button* teamOneIncrementScoreButton;
-		Button* teamTwoIncrementScoreButton;
+		Button* teamOneScoreButton;
+		Button* teamTwoScoreButton;
 
 		GameView* view;
 
@@ -29,8 +29,8 @@ class GameController {
 
 			categoryButton = new Button();
 			nextButton = new Button();
-			teamOneIncrementScoreButton = new Button();
-			teamTwoIncrementScoreButton = new Button();
+			teamOneScoreButton = new Button();
+			teamTwoScoreButton = new Button();
 			stopStartButton = new Button();
 
 			view = new GameView();
