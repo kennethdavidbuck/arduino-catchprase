@@ -14,8 +14,7 @@ class GameController {
 			team2 = new TeamModel();
 			view = new GameView();
 
-			view->setTeam1Score(team1->getScore());
-			view->setTeam2Score(team2->getScore());
+			view->setScores(team1->getScore(), team2->getScore());
 			view->setPhrase("Hello World!");
 		}
 
