@@ -1,3 +1,5 @@
+#ifndef BUTTONVIEW_H
+#define BUTTONVIEW_H
 
 class Button {
 
@@ -12,6 +14,7 @@ class Button {
 		}
 
 	public:
+
 		Button() {
 			pinMode(PIN, INPUT);
 		}
@@ -20,3 +23,5 @@ class Button {
 			return isHigh();
 		}
 };
+
+#endif

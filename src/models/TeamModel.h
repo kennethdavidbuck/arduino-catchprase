@@ -1,3 +1,5 @@
+#ifndef TEAMMODEL_H
+#define TEAMMODEL_H
 
 class TeamModel {
 
@@ -17,3 +19,5 @@ class TeamModel {
 			score = 0;
 		}
 };
+
+#endif

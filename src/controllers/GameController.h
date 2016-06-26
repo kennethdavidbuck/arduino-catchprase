@@ -1,6 +1,9 @@
+#ifndef GAMECONTROLLER_H
+#define GAMECONTROLLER_H
+
+#include "../models/TeamModel.h"
 #include "../views/ButtonView.h"
 #include "../views/GameView.h"
-#include "../models/TeamModel.h"
 
 class GameController {
 
@@ -18,6 +21,7 @@ class GameController {
 
 	public:
 		GameController() {
+			// create instances
 			team1 = new TeamModel();
 			team2 = new TeamModel();
 
@@ -35,3 +39,5 @@ class GameController {
 			view->setPhrase("Hello World!");
 		}
 };
+
+#endif

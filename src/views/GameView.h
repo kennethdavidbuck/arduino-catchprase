@@ -1,3 +1,6 @@
+#ifndef GAMEVIEW_H
+#define GAMEVIEW_H
+
 #include <LiquidCrystal.h>
 
 class GameView : public LiquidCrystal {
@@ -49,3 +52,5 @@ class GameView : public LiquidCrystal {
 			print(score);
 		}
 };
+
+#endif
