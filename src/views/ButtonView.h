@@ -1,25 +1,36 @@
 #ifndef BUTTONVIEW_H
 #define BUTTONVIEW_H
 
-class Button {
+class ButtonView {
 
 	private:
+		static ButtonView *buttonInstance;
+
+		ButtonView() {
+			pinMode(PIN, INPUT);
+		}
+
 		const int PIN = 2;
 
-	protected:
 		bool isHigh() {
 			return digitalRead(PIN) == HIGH;
 		}
 
 	public:
 
-		Button() {
-			pinMode(PIN, INPUT);
-		}
-
 		bool isPressed() {
 			return isHigh();
 		}
+
+		static ButtonView *instance() {
+			if(!buttonInstance) {
+				buttonInstance = new ButtonView;
+			}
+
+			return buttonInstance;
+		}
 };
+
+ButtonView *ButtonView::buttonInstance = 0;
 
 #endif

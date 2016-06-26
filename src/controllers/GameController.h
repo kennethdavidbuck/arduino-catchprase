@@ -11,11 +11,7 @@ class GameController {
 		TeamModel* teamOne;
 		TeamModel* teamTwo;
 
-		Button* categoryButton;
-		Button* stopStartButton;
-		Button* nextButton;
-		Button* teamOneScoreButton;
-		Button* teamTwoScoreButton;
+		ButtonView* teamOneScoreButton;
 
 		GameView* view;
 
@@ -27,11 +23,7 @@ class GameController {
 			teamOne = new TeamModel();
 			teamTwo = new TeamModel();
 
-			categoryButton = new Button();
-			nextButton = new Button();
-			teamOneScoreButton = new Button();
-			teamTwoScoreButton = new Button();
-			stopStartButton = new Button();
+			teamOneScoreButton = ButtonView::instance();
 
 			view = new GameView();
 
@@ -40,11 +32,11 @@ class GameController {
 		}
 
 		void loop() {
-			if(!isPressed && nextButton->isPressed()) {
+			if(!isPressed && teamOneScoreButton->isPressed()) {
 				isPressed = true;
 				teamOne->incrementScore();
 				view->setTeamOneScore(teamOne->getScore());
-			} else if(!nextButton->isPressed()) {
+			} else if(!teamOneScoreButton->isPressed()) {
 				isPressed = false;
 			}
 		}
