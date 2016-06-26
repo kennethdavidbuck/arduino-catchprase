@@ -5,7 +5,6 @@
 class GameController {
 
 	private:
-		GameView* view;
 		TeamModel* team1;
 		TeamModel* team2;
 
@@ -15,16 +14,19 @@ class GameController {
 		Button* team1IncrementScoreButton;
 		Button* team2IncrementScoreButton;
 
+		GameView* view;
+
 	public:
 		GameController() {
+			team1 = new TeamModel();
+			team2 = new TeamModel();
+
 			categoryButton = new Button();
 			nextButton = new Button();
 			team1IncrementScoreButton = new Button();
 			team2IncrementScoreButton = new Button();
 			stopStartButton = new Button();
 
-			team1 = new TeamModel();
-			team2 = new TeamModel();
 			view = new GameView();
 		}
 

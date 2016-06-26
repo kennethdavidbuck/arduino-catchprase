@@ -19,4 +19,4 @@ class Button {
 		bool isPressed() {
 			return isHigh();
 		}
-};
+}
