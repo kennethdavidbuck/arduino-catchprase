@@ -8,7 +8,7 @@ class ButtonView : public ObservableInterface {
 
 	static ButtonView *buttonInstance;
 
-	static const int PIN = 2;
+	const int PIN = 2;
 	int state = LOW;
 
 	ObserverInterface * observer = 0;
@@ -31,7 +31,7 @@ class ButtonView : public ObservableInterface {
 		}
 
 		static void handle() {
-			instance()->setState(digitalRead(PIN));
+			instance()->updateState();
 			instance()->notifyObservers();
 		}
 
@@ -49,8 +49,8 @@ class ButtonView : public ObservableInterface {
 			return state == HIGH;
 		}
 
-		void setState(int state) {
-			this->state = state;
+		void updateState() {
+			this->state = digitalRead(PIN);
 		}
 };
 
