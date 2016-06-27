@@ -46,7 +46,7 @@ class ButtonView : public ObservableInterface {
 		}
 
 		bool isPressed() {
-			return state == HIGH;
+			return this->state == HIGH;
 		}
 
 		void updateState() {
