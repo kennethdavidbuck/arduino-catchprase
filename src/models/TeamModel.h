@@ -3,21 +3,19 @@
 
 class TeamModel {
 
-	private:
-
-		uint8_t score = 0;
+	uint8_t score = 0;
 
 	public:
 		void incrementScore() {
-			score += 1;
+			this->score += 1;
 		}
 
 		uint8_t getScore() {
-			return score;
+			return this->score;
 		}
 
 		void resetScore() {
-			score = 0;
+			this->score = 0;
 		}
 };
 

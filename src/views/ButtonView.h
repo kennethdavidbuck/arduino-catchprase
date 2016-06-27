@@ -1,32 +1,28 @@
 #ifndef BUTTONVIEW_H
 #define BUTTONVIEW_H
 
-class ButtonView {
+#include "../interfaces/ObservableInterface.h"
+#include "../interfaces/ObserverInterface.h"
 
-	private:
+class ButtonView : public ObservableInterface {
 
-		static ButtonView *buttonInstance;
+	static ButtonView *buttonInstance;
 
-		ButtonView() {
-			pullLow();
-			pinMode(PIN, INPUT);
-		}
+	const int PIN = 2;
+	int state = LOW;
 
-		const int PIN = 2;
+	ObserverInterface * observer = 0;
 
-		bool isHigh() {
-			return digitalRead(PIN) == HIGH;
-		}
+	ButtonView() {
+		pinMode(PIN, INPUT_PULLUP);
+		attachInterrupt(digitalPinToInterrupt(PIN), handler, CHANGE);
+	}
 
-		void pullLow() {
-			digitalWrite(PIN, LOW);
-		}
+	bool isHigh() {
+		return digitalRead(PIN) == HIGH;
+	}
 
 	public:
-
-		bool isPressed() {
-			return isHigh();
-		}
 
 		static ButtonView *instance() {
 			if(!buttonInstance) {
@@ -34,6 +30,29 @@ class ButtonView {
 			}
 
 			return buttonInstance;
+		}
+
+		static void handler() {
+			instance()->updateState();
+			instance()->notifyObservers();
+		}
+
+		void attach(ObserverInterface *observer) {
+			this->observer = observer;
+		}
+
+		void notifyObservers() {
+			if(this->observer) {
+				this->observer->notify(this);
+			}
+		}
+
+		bool isPressed() {
+			return state == HIGH;
+		}
+
+		void updateState() {
+			this->state = isHigh() ? HIGH : LOW;
 		}
 };
 

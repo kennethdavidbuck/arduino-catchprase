@@ -2,44 +2,53 @@
 #define GAMECONTROLLER_H
 
 #include "../models/TeamModel.h"
+#include "../interfaces/ObserverInterface.h"
+#include "../interfaces/ObservableInterface.h"
 #include "../views/ButtonView.h"
 #include "../views/GameView.h"
 
-class GameController {
+class GameController : public ObserverInterface {
 
-	private:
-		TeamModel* teamOne;
-		TeamModel* teamTwo;
+	TeamModel* teamOne;
 
-		ButtonView* teamOneScoreButtonView;
+	TeamModel* teamTwo;
 
-		GameView* view;
+	ButtonView* teamOneScoreButtonView;
 
-		bool isPressed = false;
+	GameView* view;
+
+	bool isPressed = false;
 
 	public:
+
 		GameController() {
-			// create instances
-			teamOne = new TeamModel();
-			teamTwo = new TeamModel();
+			this->teamOne = new TeamModel();
+			this->teamTwo = new TeamModel();
 
-			teamOneScoreButtonView = ButtonView::instance();
+			this->teamOneScoreButtonView = ButtonView::instance();
 
-			view = new GameView();
+			this->view = new GameView();
 
-			view->setScores(teamOne->getScore(), teamTwo->getScore());
-			view->setPhrase("Hello World!");
+			this->teamOneScoreButtonView->attach(this);
 		}
 
-		void loop() {
-			if(!isPressed && teamOneScoreButtonView->isPressed()) {
-				isPressed = true;
-				teamOne->incrementScore();
-				view->setTeamOneScore(teamOne->getScore());
-			} else if(isPressed && !teamOneScoreButtonView->isPressed()) {
-				isPressed = false;
+		void notify(ObservableInterface *observable) {
+			if(observable == this->teamOneScoreButtonView) {
+				this->handleTeamOneScoreButton((ButtonView*) observable);
 			}
 		}
+
+		void handleTeamOneScoreButton(ButtonView *button) {
+			if(button->isPressed()) {
+				this->isPressed = true;
+				this->teamOne->incrementScore();
+				this->view->setTeamOneScore(teamOne->getScore());
+			} else if(isPressed && !button->isPressed()) {
+				this->isPressed = false;
+			}
+		}
+
+		void loop() {}
 };
 
 #endif
