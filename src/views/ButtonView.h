@@ -8,18 +8,16 @@ class ButtonView : public ObservableInterface {
 
 	static ButtonView *buttonInstance;
 
-	const int PIN = 2;
+	static const int PIN = 2;
 	int state = LOW;
 
 	ObserverInterface * observer = 0;
 
+	long unsigned time = 0;
+
 	ButtonView() {
 		pinMode(PIN, INPUT_PULLUP);
-		attachInterrupt(digitalPinToInterrupt(PIN), handle, CHANGE);
-	}
-
-	bool isHigh() {
-		return digitalRead(PIN) == HIGH;
+		attachInterrupt(digitalPinToInterrupt(PIN), handle, RISING);
 	}
 
 	public:
@@ -33,7 +31,7 @@ class ButtonView : public ObservableInterface {
 		}
 
 		static void handle() {
-			instance()->updateState();
+			instance()->setState(digitalRead(PIN));
 			instance()->notifyObservers();
 		}
 
@@ -51,8 +49,8 @@ class ButtonView : public ObservableInterface {
 			return state == HIGH;
 		}
 
-		void updateState() {
-			this->state = isHigh() ? HIGH : LOW;
+		void setState(int state) {
+			this->state = state;
 		}
 };
 

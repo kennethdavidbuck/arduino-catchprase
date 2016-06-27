@@ -17,7 +17,7 @@ class GameController : public ObserverInterface {
 
 	GameView* view;
 
-	bool isPressed = false;
+	volatile bool isPressed = false;
 
 	public:
 
@@ -39,7 +39,7 @@ class GameController : public ObserverInterface {
 		}
 
 		void handleTeamOneScoreButton(ButtonView *button) {
-			if(button->isPressed()) {
+			if(!this->isPressed && button->isPressed()) {
 				this->isPressed = true;
 				this->teamOne->incrementScore();
 				this->view->setTeamOneScore(teamOne->getScore());
