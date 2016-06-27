@@ -15,7 +15,7 @@ class ButtonView : public ObservableInterface {
 
 	ButtonView() {
 		pinMode(PIN, INPUT_PULLUP);
-		attachInterrupt(digitalPinToInterrupt(PIN), handler, CHANGE);
+		attachInterrupt(digitalPinToInterrupt(PIN), handle, CHANGE);
 	}
 
 	bool isHigh() {
@@ -32,7 +32,7 @@ class ButtonView : public ObservableInterface {
 			return buttonInstance;
 		}
 
-		static void handler() {
+		static void handle() {
 			instance()->updateState();
 			instance()->notifyObservers();
 		}
