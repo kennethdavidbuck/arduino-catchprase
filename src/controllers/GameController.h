@@ -43,7 +43,7 @@ class GameController : public ObserverInterface {
 				this->isPressed = true;
 				this->teamOne->incrementScore();
 				this->view->setTeamOneScore(teamOne->getScore());
-			} else if(isPressed && !button->isPressed()) {
+			} else if(this->isPressed && !button->isPressed()) {
 				this->isPressed = false;
 			}
 		}
