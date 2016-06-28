@@ -1,5 +1,5 @@
-#ifndef OBSERVABLEINTERFACE_H
-#define OBSERVABLEINTERFACE_H
+#ifndef OBSERVABLE_INTERFACE_H
+#define OBSERVABLE_INTERFACE_H
 
 class ObserverInterface;
 

@@ -1,5 +1,5 @@
-#ifndef OBSERVERINTERFACE_H
-#define OBSERVERINTERFACE_H
+#ifndef OBSERVER_INTERFACE_H
+#define OBSERVER_INTERFACE_H
 
 #include "ObservableInterface.h"
 

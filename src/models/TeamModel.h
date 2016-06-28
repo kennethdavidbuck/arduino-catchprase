@@ -1,5 +1,5 @@
-#ifndef TEAMMODEL_H
-#define TEAMMODEL_H
+#ifndef TEAM_MODEL_H
+#define TEAM_MODEL_H
 
 class TeamModel {
 

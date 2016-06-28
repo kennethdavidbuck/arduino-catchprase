@@ -1,5 +1,5 @@
-#ifndef GAMEVIEW_H
-#define GAMEVIEW_H
+#ifndef GAME_VIEW_H
+#define GAME_VIEW_H
 
 #include <LiquidCrystal.h>
 

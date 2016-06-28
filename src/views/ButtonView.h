@@ -1,5 +1,5 @@
-#ifndef BUTTONVIEW_H
-#define BUTTONVIEW_H
+#ifndef BUTTON_VIEW_H
+#define BUTTON_VIEW_H
 
 #include "../interfaces/ObservableInterface.h"
 #include "../interfaces/ObserverInterface.h"

@@ -1,5 +1,5 @@
-#ifndef GAMECONTROLLER_H
-#define GAMECONTROLLER_H
+#ifndef GAME_CONTROLLER_H
+#define GAME_CONTROLLER_H
 
 #include "../models/TeamModel.h"
 #include "../interfaces/ObserverInterface.h"
