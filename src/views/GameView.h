@@ -35,7 +35,7 @@ class GameView : public LiquidCrystal {
 			this->print(phrase);
 		}
 
-		void setScores(uint8_t teamOneScore, uint8_t teamTwoScore) {
+		void setTeamScores(uint8_t teamOneScore, uint8_t teamTwoScore) {
 			this->setTeamOneScore(teamOneScore);
 			this->setTeamTwoScore(teamTwoScore);
 		}
