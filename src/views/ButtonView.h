@@ -63,7 +63,7 @@ class ButtonView : public ObservableInterface {
 		}
 };
 
-unsigned long ButtonView::debounceTime = 50;
+unsigned long ButtonView::debounceTime = 100;
 
 volatile unsigned long ButtonView::lastMicros = 0;
 
