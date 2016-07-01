@@ -17,7 +17,7 @@ class ButtonView : public ObservableInterface {
 
 	ButtonView() {
 		pinMode(PIN, INPUT_PULLUP);
-		attachInterrupt(digitalPinToInterrupt(PIN), handle, RISING);
+		attachInterrupt(digitalPinToInterrupt(PIN), handle, LOW);
 	}
 
 	public:
