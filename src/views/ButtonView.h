@@ -8,7 +8,7 @@ class ButtonView : public ObservableInterface {
 
 	static ButtonView *buttonInstance;
 
-	const int PIN = 2;
+	static const int PIN = 2;
 	int state = HIGH;
 
 	ObserverInterface * observer = 0;
@@ -31,13 +31,16 @@ class ButtonView : public ObservableInterface {
 		}
 
 		static void debounceHandler() {
-			if((long)(micros() - lastMicros) >= debounceTime * 1000) {
+			long currentMicros = (long) micros();
+
+			if(currentMicros - lastMicros >= debounceTime * 1000) {
 				handle();
-				lastMicros = micros();
+				lastMicros = currentMicros;
 			}
 		}
 
 		static void handle() {
+			instance()->setState(digitalRead(PIN));
 			instance()->notifyObservers();
 		}
 
@@ -52,11 +55,15 @@ class ButtonView : public ObservableInterface {
 		}
 
 		bool isPressed() {
-			return digitalRead(PIN) == LOW;
+			return this->state == LOW;
+		}
+
+		void setState(int state) {
+			this->state = state;
 		}
 };
 
-unsigned long ButtonView::debounceTime = 100;
+unsigned long ButtonView::debounceTime = 200;
 
 volatile unsigned long ButtonView::lastMicros = 0;
 
