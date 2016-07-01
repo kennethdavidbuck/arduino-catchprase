@@ -13,14 +13,14 @@ class ButtonView : public ObservableInterface {
 
 	ObserverInterface * observer = 0;
 
-	long unsigned time = 0;
-
 	ButtonView() {
 		pinMode(PIN, INPUT_PULLUP);
-		attachInterrupt(digitalPinToInterrupt(PIN), handle, FALLING);
+		attachInterrupt(digitalPinToInterrupt(PIN), debounceHandler, FALLING);
 	}
 
 	public:
+		static volatile unsigned long lastMicros;
+		static unsigned long debounceTime;
 
 		static ButtonView *instance() {
 			if(!buttonInstance) {
@@ -28,6 +28,13 @@ class ButtonView : public ObservableInterface {
 			}
 
 			return buttonInstance;
+		}
+
+		static void debounceHandler() {
+			if((long)(micros() - lastMicros) >= debounceTime * 1000) {
+				handle();
+				lastMicros = micros();
+			}
 		}
 
 		static void handle() {
@@ -48,6 +55,10 @@ class ButtonView : public ObservableInterface {
 			return digitalRead(PIN) == LOW;
 		}
 };
+
+unsigned long ButtonView::debounceTime = 100;
+
+volatile unsigned long ButtonView::lastMicros = 0;
 
 ButtonView *ButtonView::buttonInstance = 0;
 
