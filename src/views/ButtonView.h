@@ -17,7 +17,7 @@ class ButtonView : public ObservableInterface {
 
 	ButtonView() {
 		pinMode(PIN, INPUT_PULLUP);
-		attachInterrupt(digitalPinToInterrupt(PIN), handle, LOW);
+		attachInterrupt(digitalPinToInterrupt(PIN), handle, FALLING);
 	}
 
 	public:
@@ -31,7 +31,6 @@ class ButtonView : public ObservableInterface {
 		}
 
 		static void handle() {
-			instance()->updateState();
 			instance()->notifyObservers();
 		}
 
@@ -46,11 +45,7 @@ class ButtonView : public ObservableInterface {
 		}
 
 		bool isPressed() {
-			return this->state == LOW;
-		}
-
-		void updateState() {
-			this->state = digitalRead(PIN);
+			return digitalRead(PIN) == LOW;
 		}
 };
 
