@@ -9,7 +9,7 @@ class ButtonView : public ObservableInterface {
 	static ButtonView *buttonInstance;
 
 	const int PIN = 2;
-	int state = LOW;
+	int state = HIGH;
 
 	ObserverInterface * observer = 0;
 
@@ -46,7 +46,7 @@ class ButtonView : public ObservableInterface {
 		}
 
 		bool isPressed() {
-			return this->state == HIGH;
+			return this->state == LOW;
 		}
 
 		void updateState() {
