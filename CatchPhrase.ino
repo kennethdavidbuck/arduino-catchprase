@@ -43,7 +43,7 @@ void debounceHandler() {
  */
 void handler() {
   if(buttonIsPressed(TEAM_ONE_BUTTON_PIN)) {
-      teamOneScore++;
+    teamOneScore++;
   } else if(buttonIsPressed(TEAM_TWO_BUTTON_PIN)) {
     teamTwoScore++;
   }  
