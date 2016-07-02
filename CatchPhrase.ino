@@ -2,11 +2,11 @@
 #include "CatchPhrase.h"
 #include "GameView.h"
 
-// Button Pins
-const int TEAM_ONE_PIN = 2;
-const int TEAM_TWO_PIN = 3;
-const int STOP_START_PIN = 4;
-const int CATEGORY_PIN = 5;
+// Pins
+const int TEAM_ONE_PIN    = 2;
+const int TEAM_TWO_PIN    = 3;
+const int CATEGORY_PIN    = 4;
+const int STOP_START_PIN  = 5;
 
 // Scores
 volatile int teamOneScore = 0;
@@ -18,6 +18,15 @@ const unsigned long DEBOUNCE_TIME = 150000;
 
 // Views
 GameView *view;
+
+void setup() {
+  initializeInterrupt(TEAM_ONE_PIN, FALLING);
+  initializeInterrupt(TEAM_TWO_PIN, FALLING);
+
+  view = new GameView();  
+  
+  view->setTeamScores(teamOneScore, teamTwoScore);
+}
 
 void initializeInterrupt(int pin, int state) {
   attachInterrupt(digitalPinToInterrupt(pin), debounceHandler, state);
@@ -35,27 +44,19 @@ void debounceHandler() {
 
 void handler() {  
   if(buttonIsPressed(TEAM_ONE_PIN)) {
-    teamOneScore++;
+    view->setTeamOneScore(++teamOneScore);
   } else if(buttonIsPressed(TEAM_TWO_PIN)) {
-    teamTwoScore++;
+    view->setTeamOneScore(++teamOneScore);
   }  
+
+  view->setTeamScores(teamOneScore, teamTwoScore);
 }
 
-/**
- * 
- */
 bool buttonIsPressed(int pin) {
   return digitalRead(pin) == LOW;
 }
 
-void setup() {
-  initializeInterrupt(TEAM_ONE_PIN, FALLING);
-  initializeInterrupt(TEAM_TWO_PIN, FALLING);
-
-  view = new GameView();  
-}
-
 void loop() { 
-  view->setTeamScores(teamOneScore, teamTwoScore);
+ 
 }
 
