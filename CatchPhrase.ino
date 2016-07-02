@@ -1,4 +1,5 @@
 
+#include "CatchPhrase.h"
 #include "GameView.h"
 
 const int TEAM_ONE_BUTTON_PIN = 2;
@@ -13,22 +14,11 @@ volatile unsigned long lastMicros = 0;
 
 GameView *view;
 
-void initializeInterrupt(int pin);
-bool buttonIsPressed(int pin);
-void handler();
-void debounceHandler();
-
-/**
- * 
- */
 void initializeInterrupt(int pin) {
   attachInterrupt(digitalPinToInterrupt(pin), debounceHandler, FALLING);
   pinMode(pin, INPUT_PULLUP);
 }
 
-/**
- * 
- */
 void debounceHandler() {
   unsigned long currentMicros = (long) micros();
   
@@ -38,9 +28,6 @@ void debounceHandler() {
   }  
 }
 
-/**
- * 
- */
 void handler() {
   if(buttonIsPressed(TEAM_ONE_BUTTON_PIN)) {
     teamOneScore++;
@@ -49,9 +36,6 @@ void handler() {
   }  
 }
 
-/**
- * 
- */
 bool buttonIsPressed(int pin) {
   return digitalRead(pin) == LOW;
 }
