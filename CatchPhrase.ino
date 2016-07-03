@@ -11,8 +11,9 @@ const int STOP_START_PIN  = 5;
 // Scores
 volatile bool incrementTeamOneScore = false;
 volatile bool incrementTeamTwoScore = false;
-volatile int teamOneScore = 0;
-volatile int teamTwoScore = 0;
+
+int teamOneScore = 0;
+int teamTwoScore = 0;
 
 // Debounce Values
 volatile unsigned long lastMicros = 0;
@@ -44,7 +45,7 @@ void debounceHandler() {
   }  
 }
 
-void handler() {  
+void handler() {
   if(buttonIsPressed(TEAM_ONE_PIN)) {
     incrementTeamOneScore = true;
   } else if(buttonIsPressed(TEAM_TWO_PIN)) {
