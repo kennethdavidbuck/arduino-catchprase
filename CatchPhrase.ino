@@ -9,11 +9,8 @@ const int CATEGORY_PIN    = 4;
 const int STOP_START_PIN  = 5;
 
 // Scores
-volatile bool incrementTeamOneScore = false;
-volatile bool incrementTeamTwoScore = false;
-
-int teamOneScore = 0;
-int teamTwoScore = 0;
+volatile int teamOneScore = 0;
+volatile int teamTwoScore = 0;
 
 // Debounce Values
 volatile unsigned long lastMicros = 0;
@@ -47,9 +44,9 @@ void debounceHandler() {
 
 void handler() {
   if(buttonIsPressed(TEAM_ONE_PIN)) {
-    incrementTeamOneScore = true;
+    teamOneScore++;
   } else if(buttonIsPressed(TEAM_TWO_PIN)) {
-    incrementTeamTwoScore = true;
+    teamTwoScore++;
   }  
 }
 
@@ -58,13 +55,5 @@ bool buttonIsPressed(int pin) {
 }
 
 void loop() {
-  if(incrementTeamOneScore) {
-    incrementTeamOneScore = false;
-    view->setTeamOneScore(++teamOneScore);
-  }
-
-  if(incrementTeamTwoScore) {
-    incrementTeamTwoScore = false;
-      view->setTeamTwoScore(++teamTwoScore);
-  }
+  view->setTeamScores(teamOneScore, teamTwoScore);
 }
