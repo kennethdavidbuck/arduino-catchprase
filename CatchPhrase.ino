@@ -50,8 +50,6 @@ void handler() {
   } else if(buttonIsPressed(TEAM_TWO_PIN)) {
     incrementTeamTwoScore = true;
   }  
-
-  view->setTeamScores(teamOneScore, teamTwoScore);
 }
 
 bool buttonIsPressed(int pin) {
