@@ -9,6 +9,8 @@ const int CATEGORY_PIN    = 4;
 const int STOP_START_PIN  = 5;
 
 // Scores
+volatile bool incrementTeamOneScore = false;
+volatile bool incrementTeamTwoScore = false;
 volatile int teamOneScore = 0;
 volatile int teamTwoScore = 0;
 
@@ -44,9 +46,9 @@ void debounceHandler() {
 
 void handler() {  
   if(buttonIsPressed(TEAM_ONE_PIN)) {
-    view->setTeamOneScore(++teamOneScore);
+    incrementTeamOneScore = true;
   } else if(buttonIsPressed(TEAM_TWO_PIN)) {
-    view->setTeamTwoScore(++teamTwoScore);
+    incrementTeamTwoScore = true;
   }  
 
   view->setTeamScores(teamOneScore, teamTwoScore);
@@ -56,6 +58,15 @@ bool buttonIsPressed(int pin) {
   return digitalRead(pin) == LOW;
 }
 
-void loop() { 
+void loop() {
+  if(incrementTeamOneScore) {
+    incrementTeamOneScore = false;
+    view->setTeamOneScore(++teamOneScore);
+  }
+
+  if(incrementTeamTwoScore) {
+    incrementTeamTwoScore = false;
+      view->setTeamTwoScore(++teamTwoScore);
+  }
  
 }
