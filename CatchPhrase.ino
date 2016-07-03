@@ -68,5 +68,4 @@ void loop() {
     incrementTeamTwoScore = false;
       view->setTeamTwoScore(++teamTwoScore);
   }
- 
 }
