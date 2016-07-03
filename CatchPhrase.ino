@@ -46,7 +46,7 @@ void handler() {
   if(buttonIsPressed(TEAM_ONE_PIN)) {
     view->setTeamOneScore(++teamOneScore);
   } else if(buttonIsPressed(TEAM_TWO_PIN)) {
-    view->setTeamOneScore(++teamOneScore);
+    view->setTeamTwoScore(++teamTwoScore);
   }  
 
   view->setTeamScores(teamOneScore, teamTwoScore);
