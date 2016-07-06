@@ -9,7 +9,7 @@ void initializeInterrupt(int pin);
 /**
  *
  */
-bool buttonIsPressed(int pin);
+bool isKeyPressEvent(int pin);
 
 /**
  *
