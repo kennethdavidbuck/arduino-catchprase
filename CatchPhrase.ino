@@ -13,7 +13,8 @@ int teamOneScore = 0;
 int teamTwoScore = 0;
 
 // Events
-volatile int event = 0;
+volatile int teamOneScoreEvent = HIGH;
+volatile int teamTwoScoreEvent = HIGH;
 
 // Debounce Values
 volatile unsigned long lastMicros = 0;
@@ -46,25 +47,21 @@ void debounceHandler() {
 }
 
 void handler() {
-  event = 1; 
-}
-
-bool buttonIsPressed(int pin) {
-  return digitalRead(pin) == LOW;
+  teamOneScoreEvent = digitalRead(TEAM_ONE_PIN);
+  teamTwoScoreEvent = digitalRead(TEAM_TWO_PIN);
 }
 
 void loop() {
   
-  if(event == 1) {
-      event = 0;
-
-      if(buttonIsPressed(TEAM_ONE_PIN)) {
-        teamOneScore++;
-      } else if(buttonIsPressed(TEAM_TWO_PIN)) {
-        teamTwoScore++;
-      }
-
-      view->setTeamScores(teamOneScore, teamTwoScore);
+  if(teamOneScoreEvent == LOW) {
+      teamOneScore++;
+      teamOneScoreEvent = HIGH;
   }
 
+  if(teamTwoScoreEvent == LOW) {
+    teamTwoScore++;
+    teamTwoScoreEvent = HIGH;
+  }
+    
+  view->setTeamScores(teamOneScore, teamTwoScore);
 }
