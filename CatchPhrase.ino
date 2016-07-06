@@ -20,8 +20,8 @@ const unsigned long DEBOUNCE_TIME = 150000;
 GameView *view;
 
 void setup() {
-  initializeInterrupt(TEAM_ONE_PIN, FALLING);
-  initializeInterrupt(TEAM_TWO_PIN, FALLING);
+  initializeInterrupt(TEAM_ONE_PIN, LOW);
+  initializeInterrupt(TEAM_TWO_PIN, LOW);
 
   view = new GameView();  
   
