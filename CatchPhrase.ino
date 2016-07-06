@@ -2,6 +2,13 @@
 #include "CatchPhrase.h"
 #include "GameView.h"
 
+// Messages
+const String TEAM_ONE_WIN = " TEAM ONE WINS! ";
+const String TEAM_TWO_WIN = " TEAM TWO WINS! ";
+
+// 
+const int POINTS_WIN = 7;
+
 // Pins
 const int TEAM_ONE_PIN    = 2;
 const int TEAM_TWO_PIN    = 3;
@@ -13,8 +20,19 @@ int teamOneScore = 0;
 int teamTwoScore = 0;
 
 // Events
-volatile int teamOneScoreEvent = false;
-volatile int teamTwoScoreEvent = false;
+volatile int teamOneScoreEvent = 0;
+volatile int teamTwoScoreEvent = 0;
+volatile int nextCategoryEvent = 0;
+volatile int stopStartEvent = 0;
+
+// States
+typedef enum States {
+  GAME_OVER,
+  STOPPED,
+  STARTED
+};
+
+int currentState = STOPPED;
 
 // Debounce Values
 volatile unsigned long lastMicros = 0;
@@ -27,7 +45,7 @@ void setup() {
   initializeInterrupt(TEAM_ONE_PIN, LOW);
   initializeInterrupt(TEAM_TWO_PIN, LOW);
 
-  view = new GameView();  
+  view = new GameView();
   
   view->setTeamScores(teamOneScore, teamTwoScore);
 }
@@ -52,16 +70,45 @@ void handler() {
 }
 
 void loop() {
-  
-  if(teamOneScoreEvent) {
-    teamOneScore++;
-    teamOneScoreEvent = false;
-  }
 
-  if(teamTwoScoreEvent) {
-    teamTwoScore++;
-    teamTwoScoreEvent = false;
-  }
+  switch(currentState) {
+    case GAME_OVER:
+      if(teamOneScore == POINTS_WIN) {
+        view->setPhrase(TEAM_ONE_WIN);
+      } else if(teamTwoScore == POINTS_WIN) {
+        view->setPhrase(TEAM_TWO_WIN);
+      }
+
+      if(nextCategoryEvent) {
+        currentState = STOPPED;
+        nextCategoryEvent = 0;
+      } else if(stopStartEvent) {
+        currentState = STOPPED;
+        stopStartEvent = 0;
+      }
     
+      break;
+    case STOPPED:
+      if(teamOneScoreEvent) {
+        teamOneScore++;
+        teamOneScoreEvent = 0;
+      } else if(teamTwoScoreEvent) {
+        teamTwoScore++;
+        teamTwoScoreEvent = 0;
+      }
+
+      if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
+        // play game over sound.
+        currentState = GAME_OVER;
+      }
+      
+      break;
+    case STARTED:
+      // timer runs
+      // can switch phrases
+      // can switch categories
+      break;
+  } 
+
   view->setTeamScores(teamOneScore, teamTwoScore);
 }
