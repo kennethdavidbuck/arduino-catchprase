@@ -54,8 +54,8 @@ void handler() {
 void loop() {
   
   if(teamOneScoreEvent == LOW) {
-      teamOneScore++;
-      teamOneScoreEvent = HIGH;
+    teamOneScore++;
+    teamOneScoreEvent = HIGH;
   }
 
   if(teamTwoScoreEvent == LOW) {
