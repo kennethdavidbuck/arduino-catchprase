@@ -9,12 +9,15 @@ const int CATEGORY_PIN    = 4;
 const int STOP_START_PIN  = 5;
 
 // Scores
-volatile int teamOneScore = 0;
-volatile int teamTwoScore = 0;
+int teamOneScore = 0;
+int teamTwoScore = 0;
+
+// Events
+volatile int event = 0;
 
 // Debounce Values
 volatile unsigned long lastMicros = 0;
-const unsigned long DEBOUNCE_TIME = 150000;
+const unsigned long DEBOUNCE_TIME = 100000;
 
 // Views
 GameView *view;
@@ -43,11 +46,7 @@ void debounceHandler() {
 }
 
 void handler() {
-  if(buttonIsPressed(TEAM_ONE_PIN)) {
-    teamOneScore++;
-  } else if(buttonIsPressed(TEAM_TWO_PIN)) {
-    teamTwoScore++;
-  }  
+  event = 1; 
 }
 
 bool buttonIsPressed(int pin) {
@@ -55,5 +54,17 @@ bool buttonIsPressed(int pin) {
 }
 
 void loop() {
-  view->setTeamScores(teamOneScore, teamTwoScore);
+  
+  if(event == 1) {
+      event = 0;
+
+      if(buttonIsPressed(TEAM_ONE_PIN)) {
+        teamOneScore++;
+      } else if(buttonIsPressed(TEAM_TWO_PIN)) {
+        teamTwoScore++;
+      }
+
+      view->setTeamScores(teamOneScore, teamTwoScore);
+  }
+
 }
