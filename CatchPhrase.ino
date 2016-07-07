@@ -3,8 +3,11 @@
 #include "GameView.h"
 
 // Messages
+const String EMPTY        = "";
 const String TEAM_ONE_WIN = " TEAM ONE WINS! ";
 const String TEAM_TWO_WIN = " TEAM TWO WINS! ";
+
+String currentMessage;
 
 // 
 const int POINTS_WIN = 7;
@@ -46,6 +49,8 @@ void setup() {
   initializeInterrupt(TEAM_TWO_PIN, LOW);
 
   view = new GameView();
+
+  currentMessage = EMPTY;
   
   view->setTeamScores(teamOneScore, teamTwoScore);
 }
@@ -74,9 +79,9 @@ void loop() {
   switch(currentState) {
     case GAME_OVER:
       if(teamOneScore == POINTS_WIN) {
-        view->setPhrase(TEAM_ONE_WIN);
+        currentMessage = TEAM_ONE_WIN;
       } else if(teamTwoScore == POINTS_WIN) {
-        view->setPhrase(TEAM_TWO_WIN);
+        currentMessage = TEAM_TWO_WIN;
       }
 
       if(nextCategoryEvent) {
@@ -110,5 +115,6 @@ void loop() {
       break;
   } 
 
+  view->setPhrase(currentMessage);
   view->setTeamScores(teamOneScore, teamTwoScore);
 }
