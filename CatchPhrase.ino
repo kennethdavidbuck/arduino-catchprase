@@ -78,12 +78,6 @@ void loop() {
 
   switch(currentState) {
     case GAME_OVER:
-      if(teamOneScore == POINTS_WIN) {
-        currentMessage = TEAM_ONE_WIN;
-      } else if(teamTwoScore == POINTS_WIN) {
-        currentMessage = TEAM_TWO_WIN;
-      }
-
       if(nextCategoryEvent) {
         currentState = STOPPED;
         nextCategoryEvent = 0;
@@ -103,7 +97,8 @@ void loop() {
       }
 
       if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
-        // play game over sound.
+        currentMessage = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
+
         currentState = GAME_OVER;
       }
       
