@@ -49,6 +49,14 @@ class GameView : public LiquidCrystal {
 			this->setCursor(lastColumn(), firstRow());
 			this->print(score);
 		}
+
+		int rowCount() {
+			return ROW_COUNT;
+		}
+
+		int columnCount() {
+			return COLUMN_COUNT;
+		}
 };
 
 #endif
