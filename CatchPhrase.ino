@@ -65,8 +65,6 @@ void setup() {
   initializeInterrupt(TEAM_ONE_PIN, LOW);
   initializeInterrupt(TEAM_TWO_PIN, LOW);
   initializeInterrupt(NEXT_PIN, LOW);
-  
-  game.view->setTeamScores(game.teamOneScore, game.teamTwoScore);
 }
 
 void clearEvents() {
