@@ -1,6 +1,7 @@
 
 #include "CatchPhrase.h"
 #include "GameView.h"
+#include "Pitches.h"
 
 //
 #define DEBOUNCE_TIME         100000
@@ -16,14 +17,9 @@
 // sound pins
 #define SPEAKER_PIN           5
 
-// sound notes
-#define C1_NOTE               33
-#define CS5_NOTE              523
-#define DS5_NOTE              622 
-
 // game sound notes
-#define TEAM_ONE_NOTE         CS5_NOTE
-#define TEAM_TWO_NOTE         DS5_NOTE
+#define TEAM_ONE_NOTE         NOTE_CS5
+#define TEAM_TWO_NOTE         NOTE_DS5
 // sound durations
 #define INCREMENT_DURATION    16
 
