@@ -18,10 +18,12 @@
 
 // sound notes
 #define C1_NOTE               33
+#define CS5_NOTE              523
+#define DS5_NOTE              622 
 
 // game sound notes
-#define INCREMENT_NOTE        C1_NOTE
-
+#define TEAM_ONE_NOTE         CS5_NOTE
+#define TEAM_TWO_NOTE         DS5_NOTE
 // sound durations
 #define INCREMENT_DURATION    16
 
@@ -113,19 +115,23 @@ void transitionToStopped() {
   game.state = STOPPED_STATE;
 }
 
-void playIncrementScoreSound() {
-  tone(SPEAKER_PIN, INCREMENT_NOTE, 1000 / INCREMENT_DURATION);
+void playTeamOneSound() {
+  tone(SPEAKER_PIN, TEAM_ONE_NOTE, 1000 / INCREMENT_DURATION);
+}
+
+void playTeamTwoSound() {
+  tone(SPEAKER_PIN, TEAM_TWO_NOTE, 1000 / INCREMENT_DURATION);
 }
 
 void incrementTeamOneScore() {
   clearEvents();
-  playIncrementScoreSound();
+  playTeamOneSound();
   game.teamOneScore++;
 }
 
 void incrementTeamTwoScore() {
   clearEvents();
-  playIncrementScoreSound();
+  playTeamTwoSound();
   game.teamTwoScore++;
 }
 
