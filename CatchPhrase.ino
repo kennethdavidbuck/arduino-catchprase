@@ -85,7 +85,7 @@ void loop() {
   switch(currentState) {
     case GAME_OVER:
       if(categoryEvent || stopStartEvent) {
-        currentState = STOPPED;
+        currentState    = STOPPED;
         categoryEvent   = 0;
         stopStartEvent  = 0;
         teamOneScore    = 0;
@@ -100,18 +100,26 @@ void loop() {
       } else if(teamTwoScoreEvent) {
         teamTwoScore++;
         teamTwoScoreEvent = 0;
+      } else if(stopStartEvent) {
+        currentState = STARTED;
+        stopStartEvent    = 0;
       }
 
       if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
-        currentMessage = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-        currentState = GAME_OVER;
+        currentMessage    = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
+        currentState      = GAME_OVER;
       }
       
       break;
     case STARTED:
       // timer runs
       // can switch phrases
-      // can switch categories
+      if(stopStartEvent) {
+        // timer stops (does it reset?)
+        currentState      = STOPPED;
+        stopStartEvent    = 0;
+      }
+   
       break;
   } 
 
