@@ -3,7 +3,7 @@
 #include "GameView.h"
 
 // Messages
-const String EMPTY        = "";
+const String EMPTY        = "                ";
 const String TEAM_ONE_WIN = " TEAM ONE WINS! ";
 const String TEAM_TWO_WIN = " TEAM TWO WINS! ";
 const String SUCCESS      = "    SUCCESS!    ";
@@ -92,8 +92,6 @@ void loop() {
         stopStartEvent = 0;
         teamOneScore = 0;
         teamTwoScore = 0;
-
-        currentMessage = SUCCESS;
       }
     
       break;
