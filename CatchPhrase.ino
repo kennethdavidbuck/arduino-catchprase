@@ -6,6 +6,7 @@
 const String EMPTY        = "";
 const String TEAM_ONE_WIN = " TEAM ONE WINS! ";
 const String TEAM_TWO_WIN = " TEAM TWO WINS! ";
+const String SUCCESS      = "    SUCCESS!    ";
 
 String currentMessage;
 
@@ -13,10 +14,11 @@ String currentMessage;
 const int POINTS_WIN = 7;
 
 // Pins
+const int CATEGORY_PIN    = 0;
+const int STOP_START_PIN  = 1;
 const int TEAM_ONE_PIN    = 2;
 const int TEAM_TWO_PIN    = 3;
-const int CATEGORY_PIN    = 4;
-const int STOP_START_PIN  = 5;
+const int NEXT_PIN        = 7;
 
 // Scores
 int teamOneScore = 0;
@@ -26,7 +28,7 @@ int teamTwoScore = 0;
 volatile int teamOneScoreEvent = 0;
 volatile int teamTwoScoreEvent = 0;
 volatile int nextCategoryEvent = 0;
-volatile int stopStartEvent = 0;
+volatile int stopStartEvent    = 0;
 
 // States
 typedef enum States {
@@ -45,6 +47,7 @@ const unsigned long DEBOUNCE_TIME = 100000;
 GameView *view;
 
 void setup() {
+  initializeInterrupt(STOP_START_PIN, LOW);
   initializeInterrupt(TEAM_ONE_PIN, LOW);
   initializeInterrupt(TEAM_TWO_PIN, LOW);
 
@@ -70,8 +73,9 @@ void debounceHandler() {
 }
 
 void handler() {
-  teamOneScoreEvent = digitalRead(TEAM_ONE_PIN) == LOW;
-  teamTwoScoreEvent = digitalRead(TEAM_TWO_PIN) == LOW;
+  stopStartEvent    = digitalRead(STOP_START_PIN) == LOW;
+  teamOneScoreEvent = digitalRead(TEAM_ONE_PIN)   == LOW;
+  teamTwoScoreEvent = digitalRead(TEAM_TWO_PIN)   == LOW;
 }
 
 void loop() {
@@ -81,9 +85,15 @@ void loop() {
       if(nextCategoryEvent) {
         currentState = STOPPED;
         nextCategoryEvent = 0;
+        teamOneScore = 0;
+        teamTwoScore = 0;
       } else if(stopStartEvent) {
         currentState = STOPPED;
         stopStartEvent = 0;
+        teamOneScore = 0;
+        teamTwoScore = 0;
+
+        currentMessage = SUCCESS;
       }
     
       break;
