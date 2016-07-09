@@ -27,7 +27,7 @@ int teamTwoScore = 0;
 // Events
 volatile int teamOneScoreEvent = 0;
 volatile int teamTwoScoreEvent = 0;
-volatile int nextCategoryEvent = 0;
+volatile int categoryEvent     = 0;
 volatile int stopStartEvent    = 0;
 
 // States
@@ -47,6 +47,7 @@ const unsigned long DEBOUNCE_TIME = 100000;
 GameView *view;
 
 void setup() {
+  initializeInterrupt(CATEGORY_PIN, LOW);
   initializeInterrupt(STOP_START_PIN, LOW);
   initializeInterrupt(TEAM_ONE_PIN, LOW);
   initializeInterrupt(TEAM_TWO_PIN, LOW);
@@ -73,6 +74,7 @@ void debounceHandler() {
 }
 
 void handler() {
+  categoryEvent     = digitalRead(CATEGORY_PIN)   == LOW;
   stopStartEvent    = digitalRead(STOP_START_PIN) == LOW;
   teamOneScoreEvent = digitalRead(TEAM_ONE_PIN)   == LOW;
   teamTwoScoreEvent = digitalRead(TEAM_TWO_PIN)   == LOW;
@@ -82,11 +84,13 @@ void loop() {
 
   switch(currentState) {
     case GAME_OVER:
-      if(nextCategoryEvent) {
+      if(categoryEvent) {
         currentState = STOPPED;
-        nextCategoryEvent = 0;
+        categoryEvent = 0;
         teamOneScore = 0;
         teamTwoScore = 0;
+
+        currentMessage = SUCCESS;
       } else if(stopStartEvent) {
         currentState = STOPPED;
         stopStartEvent = 0;
@@ -106,7 +110,6 @@ void loop() {
 
       if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
         currentMessage = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-
         currentState = GAME_OVER;
       }
       
