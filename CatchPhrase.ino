@@ -14,7 +14,10 @@ const int CATEGORY_PIN          = 0;
 const int STOP_START_PIN        = 1;
 const int TEAM_ONE_PIN          = 2;
 const int TEAM_TWO_PIN          = 3;
-const int NEXT_PIN              = 7; 
+const int NEXT_PIN              = 7;
+
+// speaker pins
+const int SPEAKER_PIN           = 5;
 
 // game messages
 const String EMPTY              = "                ";
@@ -106,6 +109,7 @@ void transitionToStopped() {
 }
 
 void incrementTeamOneScore() {
+  tone(SPEAKER_PIN, 33, 1000 / 4);
   clearEvents();
   game.teamOneScore++;
 }
