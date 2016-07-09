@@ -2,72 +2,66 @@
 #include "CatchPhrase.h"
 #include "GameView.h"
 
-// Messages
 const String EMPTY        = "                ";
 const String TEAM_ONE_WIN = " TEAM ONE WINS! ";
 const String TEAM_TWO_WIN = " TEAM TWO WINS! ";
 const String SUCCESS      = "    SUCCESS!    ";
 
-String currentMessage;
-
-// 
 const int POINTS_WIN = 7;
 
-// Pins
-const int CATEGORY_PIN    = 0;
-const int STOP_START_PIN  = 1;
-const int TEAM_ONE_PIN    = 2;
-const int TEAM_TWO_PIN    = 3;
-const int NEXT_PIN        = 7;
+volatile unsigned long lastMicros = 0;
+const unsigned long DEBOUNCE_TIME = 100000;
 
-// Scores
-int teamOneScore = 0;
-int teamTwoScore = 0;
+typedef enum Pins {
+  CATEGORY_PIN    = 0,
+  STOP_START_PIN  = 1,
+  TEAM_ONE_PIN    = 2,
+  TEAM_TWO_PIN    = 3,
+  NEXT_PIN        = 7
+};
 
-// Events
-volatile int teamOneScoreEvent = 0;
-volatile int teamTwoScoreEvent = 0;
-volatile int categoryEvent     = 0;
-volatile int stopStartEvent    = 0;
-volatile int nextEvent         = 0;
-
-// States
 typedef enum States {
   GAME_OVER,
   STOPPED,
   STARTED
 };
 
-int currentState = STOPPED;
+typedef enum Events {
+  TEAM_ONE_SCORE_EVENT,
+  TEAM_TWO_SCORE_EVENT,
+  CATEGORY_EVENT,
+  STOP_START_EVENT,
+  NEXT_EVENT  
+};
 
-// Debounce Values
-volatile unsigned long lastMicros = 0;
-const unsigned long DEBOUNCE_TIME = 100000;
+typedef struct Game {
+  volatile int events[5]  = {0, 0, 0, 0, 0};
+  String currentMessage   = EMPTY;
+  int currentState        = STOPPED;
+  int teamOneScore        = 0;
+  int teamTwoScore        = 0;
+  GameView *view          = new GameView();
+};
 
-// Views
-GameView *view;
+// Create the game.
+Game game;
 
 void setup() {
   initializeInterrupt(CATEGORY_PIN, LOW);
   initializeInterrupt(STOP_START_PIN, LOW);
   initializeInterrupt(TEAM_ONE_PIN, LOW);
   initializeInterrupt(TEAM_TWO_PIN, LOW);
-  initializeInterrupt(NEXT_PIN, LOW);  
-
-  view = new GameView();
-
-  clearScores();
-  currentMessage = EMPTY;
+  initializeInterrupt(NEXT_PIN, LOW);
   
-  view->setTeamScores(teamOneScore, teamTwoScore);
+  game.view->setTeamScores(game.teamOneScore, game.teamTwoScore);
 }
 
 void clearEvents() {
-  teamOneScoreEvent = 0;
-  teamTwoScoreEvent = 0;
-  categoryEvent     = 0;
-  stopStartEvent    = 0;
-  nextEvent         = 0;
+  game.events[TEAM_ONE_SCORE_EVENT] = 0;
+  game.events[TEAM_TWO_SCORE_EVENT] = 0;
+  game.events[CATEGORY_EVENT]       = 0;
+  game.events[STOP_START_EVENT]     = 0;
+  game.events[NEXT_EVENT]           = 0;
 }
 
 void initializeInterrupt(int pin, int state) {
@@ -85,75 +79,84 @@ void debounceHandler() {
 }
 
 void handler() {
-  categoryEvent     = digitalRead(CATEGORY_PIN)   == LOW;
-  stopStartEvent    = digitalRead(STOP_START_PIN) == LOW;
-  teamOneScoreEvent = digitalRead(TEAM_ONE_PIN)   == LOW;
-  teamTwoScoreEvent = digitalRead(TEAM_TWO_PIN)   == LOW;
-  nextEvent         = digitalRead(NEXT_PIN)       == LOW;
+  game.events[TEAM_ONE_SCORE_EVENT] = digitalRead(TEAM_ONE_PIN)   == LOW;
+  game.events[TEAM_TWO_SCORE_EVENT] = digitalRead(TEAM_TWO_PIN)   == LOW;
+  game.events[CATEGORY_EVENT]       = digitalRead(CATEGORY_PIN)   == LOW;
+  game.events[STOP_START_EVENT]     = digitalRead(STOP_START_PIN) == LOW;
+  game.events[NEXT_EVENT]           = digitalRead(NEXT_PIN)       == LOW;
 }
 
 void transitionToStarted() {
   clearEvents();
-  currentState = STARTED;
+  game.currentState = STARTED;
 }
 
 void transitionToGameOver() {
   clearEvents();
-  currentMessage = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-  currentState = GAME_OVER;
+  game.currentMessage = game.teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
+  game.currentState = GAME_OVER;
 }
 
 void transitionToStopped() {
   clearEvents();
-  currentState = STOPPED;
+  game.currentState = STOPPED;
 }
 
 void incrementTeamOneScore() {
   clearEvents();
-  teamOneScore++;
+  game.teamOneScore++;
 }
 
 void incrementTeamTwoScore() {
   clearEvents();
-  teamTwoScore++;
+  game.teamTwoScore++;
 }
 
-void nextPhrase() {
-  clearEvents();
+String nextPhrase() {
+  return EMPTY;
+}
+
+String nextCategory() {
+  return EMPTY;
 }
 
 bool gameIsWon() {
   clearEvents();
-  return teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN;
+  return game.teamOneScore == POINTS_WIN || game.teamTwoScore == POINTS_WIN;
 }
 
 void clearScores() {
-  teamOneScore = teamTwoScore = 0;
+  game.teamOneScore = game.teamTwoScore = 0;
+}
+
+void clearPhrase() {
+  game.currentMessage = EMPTY;
 }
 
 bool startNewGame() {
-  return categoryEvent || stopStartEvent;
+  return game.events[CATEGORY_EVENT] || game.events[STOP_START_EVENT];
 }
 
 void loop() {
 
-  switch(currentState) {
+  switch(game.currentState) {
     case GAME_OVER:
       if(startNewGame()) {
+        clearPhrase();
         clearScores();
         transitionToStopped();
       }
   
       break;
     case STOPPED:
-      if(teamOneScoreEvent) {
+      if(game.events[TEAM_ONE_SCORE_EVENT]) {
         incrementTeamOneScore();
-      } else if(teamTwoScoreEvent) {
+      } else if(game.events[TEAM_TWO_SCORE_EVENT]) {
         incrementTeamTwoScore();
-      } else if(stopStartEvent) {
+      } else if(game.events[STOP_START_EVENT]) {
         transitionToStarted();
-      } else if(nextEvent) {
-        nextPhrase();
+      } else if(game.events[CATEGORY_EVENT]) {
+        
       }
 
       if(gameIsWon()) {
@@ -162,17 +165,15 @@ void loop() {
       
       break;
     case STARTED:
-      // timer runs
-      // can switch phrases
-      if(stopStartEvent) {
+      if(game.events[STOP_START_EVENT]) {
         transitionToStopped();
-      } else if(nextEvent) {
+      } else if(game.events[NEXT_EVENT]) {
         nextPhrase();
       }
    
       break;
   } 
 
-  view->setPhrase(currentMessage);
-  view->setTeamScores(teamOneScore, teamTwoScore);
+  game.view->setPhrase(game.currentMessage);
+  game.view->setTeamScores(game.teamOneScore, game.teamTwoScore);
 }
