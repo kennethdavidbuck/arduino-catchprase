@@ -2,16 +2,12 @@
 #include "CatchPhrase.h"
 #include "GameView.h"
 
+//
 volatile unsigned long lastMicros = 0;
 const unsigned long DEBOUNCE_TIME = 100000;
 
+// 
 const int POINTS_WIN            = 7;
-
-// messages
-const String EMPTY              = "                ";
-const String TEAM_ONE_WIN       = " TEAM ONE WINS! ";
-const String TEAM_TWO_WIN       = " TEAM TWO WINS! ";
-const String SUCCESS            = "    SUCCESS!    ";
 
 // interrupt pins
 const int CATEGORY_PIN          = 0;
@@ -19,6 +15,12 @@ const int STOP_START_PIN        = 1;
 const int TEAM_ONE_PIN          = 2;
 const int TEAM_TWO_PIN          = 3;
 const int NEXT_PIN              = 7; 
+
+// game messages
+const String EMPTY              = "                ";
+const String TEAM_ONE_WIN       = " TEAM ONE WINS! ";
+const String TEAM_TWO_WIN       = " TEAM TWO WINS! ";
+const String SUCCESS            = "    SUCCESS!    ";
 
 // game states
 const int OVER_STATE            = 0;
