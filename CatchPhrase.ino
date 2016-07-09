@@ -84,18 +84,14 @@ void loop() {
 
   switch(currentState) {
     case GAME_OVER:
-      if(categoryEvent) {
+      if(categoryEvent || stopStartEvent) {
         currentState = STOPPED;
         categoryEvent = 0;
-        teamOneScore = 0;
-        teamTwoScore = 0;
-      } else if(stopStartEvent) {
-        currentState = STOPPED;
         stopStartEvent = 0;
         teamOneScore = 0;
         teamTwoScore = 0;
       }
-    
+  
       break;
     case STOPPED:
       if(teamOneScoreEvent) {
