@@ -21,9 +21,9 @@ const int TEAM_TWO_PIN          = 3;
 const int NEXT_PIN              = 7; 
 
 // game states
-const int OVER                  = 0;
-const int STOPPED               = 1;
-const int STARTED               = 2;
+const int OVER_STATE            = 0;
+const int STOPPED_STATE         = 1;
+const int STARTED_STATE         = 2;
 
 // game events
 const int TEAM_ONE_SCORE_EVENT  = 0;
@@ -36,7 +36,7 @@ const int NEXT_EVENT            = 4;
 typedef struct Game {
   volatile int events[5]        = {0, 0, 0, 0, 0};
   String message                = EMPTY;
-  int state                     = STOPPED;
+  int state                     = STOPPED_STATE;
   int teamOneScore              = 0;
   int teamTwoScore              = 0;
   GameView *view                = new GameView();
@@ -87,18 +87,18 @@ void handler() {
 
 void transitionToStarted() {
   clearEvents();
-  game.state = STARTED;
+  game.state = STARTED_STATE;
 }
 
 void transitionToGameOver() {
   clearEvents();
   game.message = game.teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-  game.state   = OVER;
+  game.state   = OVER_STATE;
 }
 
 void transitionToStopped() {
   clearEvents();
-  game.state = STOPPED;
+  game.state = STOPPED_STATE;
 }
 
 void incrementTeamOneScore() {
@@ -139,7 +139,7 @@ bool startNewGame() {
 void loop() {
 
   switch(game.state) {
-    case OVER:
+    case OVER_STATE:
       if(startNewGame()) {
         clearPhrase();
         clearScores();
@@ -147,7 +147,7 @@ void loop() {
       }
   
       break;
-    case STOPPED:
+    case STOPPED_STATE:
       if(game.events[TEAM_ONE_SCORE_EVENT]) {
         incrementTeamOneScore();
       } else if(game.events[TEAM_TWO_SCORE_EVENT]) {
@@ -163,7 +163,7 @@ void loop() {
       }
       
       break;
-    case STARTED:
+    case STARTED_STATE:
       if(game.events[STOP_START_EVENT]) {
         transitionToStopped();
       } else if(game.events[NEXT_EVENT]) {
