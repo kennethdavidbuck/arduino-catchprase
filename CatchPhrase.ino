@@ -89,8 +89,6 @@ void loop() {
         categoryEvent = 0;
         teamOneScore = 0;
         teamTwoScore = 0;
-
-        currentMessage = SUCCESS;
       } else if(stopStartEvent) {
         currentState = STOPPED;
         stopStartEvent = 0;
