@@ -56,17 +56,18 @@ void setup() {
 
   view = new GameView();
 
+  clearScores();
   currentMessage = EMPTY;
   
   view->setTeamScores(teamOneScore, teamTwoScore);
 }
 
 void clearEvents() {
-  volatile int teamOneScoreEvent = 0;
-  volatile int teamTwoScoreEvent = 0;
-  volatile int categoryEvent     = 0;
-  volatile int stopStartEvent    = 0;
-  volatile int nextEvent         = 0;
+  teamOneScoreEvent = 0;
+  teamTwoScoreEvent = 0;
+  categoryEvent     = 0;
+  stopStartEvent    = 0;
+  nextEvent         = 0;
 }
 
 void initializeInterrupt(int pin, int state) {
@@ -91,33 +92,74 @@ void handler() {
   nextEvent         = digitalRead(NEXT_PIN)       == LOW;
 }
 
+void transitionToStarted() {
+  clearEvents();
+  currentState = STARTED;
+}
+
+void transitionToGameOver() {
+  clearEvents();
+  currentMessage = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
+  currentState = GAME_OVER;
+}
+
+void transitionToStopped() {
+  clearEvents();
+  currentState = STOPPED;
+}
+
+void incrementTeamOneScore() {
+  clearEvents();
+  teamOneScore++;
+}
+
+void incrementTeamTwoScore() {
+  clearEvents();
+  teamTwoScore++;
+}
+
+void nextPhrase() {
+  clearEvents();
+}
+
+bool gameIsWon() {
+  clearEvents();
+  
+  if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
+    return true;  
+  }
+
+  return false;
+}
+
+void clearScores() {
+  clearEvents();
+  teamOneScore = teamTwoScore = 0;
+}
+
 void loop() {
 
   switch(currentState) {
     case GAME_OVER:
       if(categoryEvent || stopStartEvent) {
-        currentState = STOPPED;
-        clearEvents();
+        clearScores();
+        transitionToStopped();
       }
   
       break;
     case STOPPED:
       if(teamOneScoreEvent) {
-        teamOneScore++;
-        clearEvents();
+        incrementTeamOneScore();
       } else if(teamTwoScoreEvent) {
-        teamTwoScore++;
-        clearEvents();
+        incrementTeamTwoScore();
       } else if(stopStartEvent) {
-        currentState = STARTED;
-        clearEvents();
+        transitionToStarted();
       } else if(nextEvent) {
-        clearEvents;
+        nextPhrase();
       }
 
-      if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
-        currentMessage = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-        currentState = GAME_OVER;
+      if(gameIsWon()) {
+        transitionToGameOver();
       }
       
       break;
@@ -125,12 +167,9 @@ void loop() {
       // timer runs
       // can switch phrases
       if(stopStartEvent) {
-        // timer stops (does it reset?)
-        currentState = STOPPED;
-        clearEvents();
+        transitionToStopped();
       } else if(nextEvent) {
-        // next phrase
-        clearEvents();
+        nextPhrase();
       }
    
       break;

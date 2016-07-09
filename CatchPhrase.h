@@ -27,4 +27,14 @@ void debounceHandler();
  */
 void clearEvents();
 
+/**
+ *
+ */
+void clearScores();
+
+/**
+ *
+ */
+void transitionToStarted();
+
 #endif
