@@ -16,8 +16,17 @@ const int TEAM_ONE_PIN          = 2;
 const int TEAM_TWO_PIN          = 3;
 const int NEXT_PIN              = 7;
 
-// speaker pins
+// sound pins
 const int SPEAKER_PIN           = 5;
+
+// sound notes
+const int C1_NOTE               = 33;
+
+// game sound notes
+const int INCREMENT_NOTE        = C1_NOTE;
+
+// sound durations
+const int INCREMENT_DURATION    = 16;
 
 // game messages
 const String EMPTY              = "                ";
@@ -108,14 +117,19 @@ void transitionToStopped() {
   game.state = STOPPED_STATE;
 }
 
+void playIncrementScoreSound() {
+  tone(SPEAKER_PIN, INCREMENT_NOTE, 1000 / INCREMENT_DURATION);
+}
+
 void incrementTeamOneScore() {
-  tone(SPEAKER_PIN, 33, 1000 / 4);
   clearEvents();
+  playIncrementScoreSound();
   game.teamOneScore++;
 }
 
 void incrementTeamTwoScore() {
   clearEvents();
+  playIncrementScoreSound();
   game.teamTwoScore++;
 }
 
