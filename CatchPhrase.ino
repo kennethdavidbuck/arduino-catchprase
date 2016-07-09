@@ -29,6 +29,7 @@ volatile int teamOneScoreEvent = 0;
 volatile int teamTwoScoreEvent = 0;
 volatile int categoryEvent     = 0;
 volatile int stopStartEvent    = 0;
+volatile int nextEvent         = 0;
 
 // States
 typedef enum States {
@@ -51,6 +52,7 @@ void setup() {
   initializeInterrupt(STOP_START_PIN, LOW);
   initializeInterrupt(TEAM_ONE_PIN, LOW);
   initializeInterrupt(TEAM_TWO_PIN, LOW);
+  initializeInterrupt(NEXT_PIN, LOW);  
 
   view = new GameView();
 
@@ -78,6 +80,7 @@ void handler() {
   stopStartEvent    = digitalRead(STOP_START_PIN) == LOW;
   teamOneScoreEvent = digitalRead(TEAM_ONE_PIN)   == LOW;
   teamTwoScoreEvent = digitalRead(TEAM_TWO_PIN)   == LOW;
+  nextEvent         = digitalRead(NEXT_PIN)       == LOW;
 }
 
 void loop() {
@@ -103,6 +106,9 @@ void loop() {
       } else if(stopStartEvent) {
         currentState      = STARTED;
         stopStartEvent    = 0;
+      } else if(nextEvent) {
+        nextEvent         = 0;
+        currentMessage    = SUCCESS;
       }
 
       if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
@@ -118,6 +124,8 @@ void loop() {
         // timer stops (does it reset?)
         currentState      = STOPPED;
         stopStartEvent    = 0;
+      } else if(nextEvent) {
+        nextEvent         = 0;
       }
    
       break;

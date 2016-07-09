@@ -26,7 +26,7 @@ class GameView : public LiquidCrystal {
 
 	public:
 
-		GameView() : LiquidCrystal (7, 8, 9, 10, 11, 12) {
+		GameView() : LiquidCrystal (6, 8, 9, 10, 11, 12) {
 			this->begin(COLUMN_COUNT, ROW_COUNT);
 		}
 
