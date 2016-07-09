@@ -5,7 +5,7 @@
 volatile unsigned long lastMicros = 0;
 const unsigned long DEBOUNCE_TIME = 100000;
 
-const int POINTS_WIN = 7;
+const int POINTS_WIN            = 7;
 
 // messages
 const String EMPTY              = "                ";
