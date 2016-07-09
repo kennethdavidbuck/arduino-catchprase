@@ -61,6 +61,14 @@ void setup() {
   view->setTeamScores(teamOneScore, teamTwoScore);
 }
 
+void clearEvents() {
+  volatile int teamOneScoreEvent = 0;
+  volatile int teamTwoScoreEvent = 0;
+  volatile int categoryEvent     = 0;
+  volatile int stopStartEvent    = 0;
+  volatile int nextEvent         = 0;
+}
+
 void initializeInterrupt(int pin, int state) {
   attachInterrupt(digitalPinToInterrupt(pin), debounceHandler, state);
   pinMode(pin, INPUT_PULLUP);
@@ -88,32 +96,28 @@ void loop() {
   switch(currentState) {
     case GAME_OVER:
       if(categoryEvent || stopStartEvent) {
-        currentState    = STOPPED;
-        categoryEvent   = 0;
-        stopStartEvent  = 0;
-        teamOneScore    = 0;
-        teamTwoScore    = 0;
+        currentState = STOPPED;
+        clearEvents();
       }
   
       break;
     case STOPPED:
       if(teamOneScoreEvent) {
         teamOneScore++;
-        teamOneScoreEvent = 0;
+        clearEvents();
       } else if(teamTwoScoreEvent) {
         teamTwoScore++;
-        teamTwoScoreEvent = 0;
+        clearEvents();
       } else if(stopStartEvent) {
-        currentState      = STARTED;
-        stopStartEvent    = 0;
+        currentState = STARTED;
+        clearEvents();
       } else if(nextEvent) {
-        nextEvent         = 0;
-        currentMessage    = SUCCESS;
+        clearEvents;
       }
 
       if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
-        currentMessage    = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-        currentState      = GAME_OVER;
+        currentMessage = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
+        currentState = GAME_OVER;
       }
       
       break;
@@ -122,10 +126,11 @@ void loop() {
       // can switch phrases
       if(stopStartEvent) {
         // timer stops (does it reset?)
-        currentState      = STOPPED;
-        stopStartEvent    = 0;
+        currentState = STOPPED;
+        clearEvents();
       } else if(nextEvent) {
-        nextEvent         = 0;
+        // next phrase
+        clearEvents();
       }
    
       break;

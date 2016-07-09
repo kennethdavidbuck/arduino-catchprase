@@ -21,4 +21,10 @@ void handler();
  */
 void debounceHandler();
 
+
+/**
+ *
+ */
+void clearEvents();
+
 #endif
