@@ -3,48 +3,45 @@
 #include "GameView.h"
 
 //
-volatile unsigned long lastMicros = 0;
-const unsigned long DEBOUNCE_TIME = 100000;
-
-// 
-const int POINTS_WIN            = 7;
+#define DEBOUNCE_TIME         100000
+#define POINTS_WIN            7
 
 // interrupt pins
-const int CATEGORY_PIN          = 0;
-const int STOP_START_PIN        = 1;
-const int TEAM_ONE_PIN          = 2;
-const int TEAM_TWO_PIN          = 3;
-const int NEXT_PIN              = 7;
+#define CATEGORY_PIN          0
+#define STOP_START_PIN        1
+#define TEAM_ONE_PIN          2
+#define TEAM_TWO_PIN          3
+#define NEXT_PIN              7
 
 // sound pins
-const int SPEAKER_PIN           = 5;
+#define SPEAKER_PIN           5
 
 // sound notes
-const int C1_NOTE               = 33;
+#define C1_NOTE               33
 
 // game sound notes
-const int INCREMENT_NOTE        = C1_NOTE;
+#define INCREMENT_NOTE        C1_NOTE
 
 // sound durations
-const int INCREMENT_DURATION    = 16;
+#define INCREMENT_DURATION    16
 
 // game messages
-const String EMPTY              = "                ";
-const String TEAM_ONE_WIN       = " TEAM ONE WINS! ";
-const String TEAM_TWO_WIN       = " TEAM TWO WINS! ";
-const String SUCCESS            = "    SUCCESS!    ";
+#define EMPTY                  "                "
+#define TEAM_ONE_WIN           " TEAM ONE WINS! "
+#define TEAM_TWO_WIN           " TEAM TWO WINS! "
+#define SUCCESS                "    SUCCESS!    "
 
 // game states
-const int OVER_STATE            = 0;
-const int STOPPED_STATE         = 1;
-const int STARTED_STATE         = 2;
+#define OVER_STATE            0
+#define STOPPED_STATE         1
+#define STARTED_STATE         2
 
 // game events
-const int TEAM_ONE_SCORE_EVENT  = 0;
-const int TEAM_TWO_SCORE_EVENT  = 1;
-const int CATEGORY_EVENT        = 2;
-const int STOP_START_EVENT      = 3;
-const int NEXT_EVENT            = 4;
+#define TEAM_ONE_SCORE_EVENT  0
+#define TEAM_TWO_SCORE_EVENT  1
+#define CATEGORY_EVENT        2
+#define STOP_START_EVENT      3
+#define NEXT_EVENT            4
 
 // game
 typedef struct Game {
@@ -59,6 +56,7 @@ typedef struct Game {
 };
 
 // Create the game.
+volatile unsigned long lastMicros = 0;
 Game game;
 
 void setup() {
