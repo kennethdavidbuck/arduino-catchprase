@@ -86,10 +86,10 @@ void loop() {
     case GAME_OVER:
       if(categoryEvent || stopStartEvent) {
         currentState = STOPPED;
-        categoryEvent = 0;
-        stopStartEvent = 0;
-        teamOneScore = 0;
-        teamTwoScore = 0;
+        categoryEvent   = 0;
+        stopStartEvent  = 0;
+        teamOneScore    = 0;
+        teamTwoScore    = 0;
       }
   
       break;
