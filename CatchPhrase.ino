@@ -41,6 +41,8 @@ typedef struct Game {
   int state                     = STOPPED_STATE;
   int teamOneScore              = 0;
   int teamTwoScore              = 0;
+  int categoryIndex             = 0;
+  int phraseIndex               = 0;
   GameView *view                = new GameView();
 };
 
