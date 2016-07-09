@@ -101,7 +101,7 @@ void loop() {
         teamTwoScore++;
         teamTwoScoreEvent = 0;
       } else if(stopStartEvent) {
-        currentState = STARTED;
+        currentState      = STARTED;
         stopStartEvent    = 0;
       }
 
