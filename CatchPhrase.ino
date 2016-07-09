@@ -2,30 +2,72 @@
 #include "CatchPhrase.h"
 #include "GameView.h"
 
+// Messages
+const String EMPTY        = "                ";
+const String TEAM_ONE_WIN = " TEAM ONE WINS! ";
+const String TEAM_TWO_WIN = " TEAM TWO WINS! ";
+const String SUCCESS      = "    SUCCESS!    ";
+
+String currentMessage;
+
+// 
+const int POINTS_WIN = 7;
+
 // Pins
+const int CATEGORY_PIN    = 0;
+const int STOP_START_PIN  = 1;
 const int TEAM_ONE_PIN    = 2;
 const int TEAM_TWO_PIN    = 3;
-const int CATEGORY_PIN    = 4;
-const int STOP_START_PIN  = 5;
+const int NEXT_PIN        = 7;
 
 // Scores
-volatile int teamOneScore = 0;
-volatile int teamTwoScore = 0;
+int teamOneScore = 0;
+int teamTwoScore = 0;
+
+// Events
+volatile int teamOneScoreEvent = 0;
+volatile int teamTwoScoreEvent = 0;
+volatile int categoryEvent     = 0;
+volatile int stopStartEvent    = 0;
+volatile int nextEvent         = 0;
+
+// States
+typedef enum States {
+  GAME_OVER,
+  STOPPED,
+  STARTED
+};
+
+int currentState = STOPPED;
 
 // Debounce Values
 volatile unsigned long lastMicros = 0;
-const unsigned long DEBOUNCE_TIME = 150000;
+const unsigned long DEBOUNCE_TIME = 100000;
 
 // Views
 GameView *view;
 
 void setup() {
-  initializeInterrupt(TEAM_ONE_PIN, FALLING);
-  initializeInterrupt(TEAM_TWO_PIN, FALLING);
+  initializeInterrupt(CATEGORY_PIN, LOW);
+  initializeInterrupt(STOP_START_PIN, LOW);
+  initializeInterrupt(TEAM_ONE_PIN, LOW);
+  initializeInterrupt(TEAM_TWO_PIN, LOW);
+  initializeInterrupt(NEXT_PIN, LOW);  
 
-  view = new GameView();  
+  view = new GameView();
+
+  clearScores();
+  currentMessage = EMPTY;
   
   view->setTeamScores(teamOneScore, teamTwoScore);
+}
+
+void clearEvents() {
+  teamOneScoreEvent = 0;
+  teamTwoScoreEvent = 0;
+  categoryEvent     = 0;
+  stopStartEvent    = 0;
+  nextEvent         = 0;
 }
 
 void initializeInterrupt(int pin, int state) {
@@ -43,17 +85,94 @@ void debounceHandler() {
 }
 
 void handler() {
-  if(buttonIsPressed(TEAM_ONE_PIN)) {
-    teamOneScore++;
-  } else if(buttonIsPressed(TEAM_TWO_PIN)) {
-    teamTwoScore++;
-  }  
+  categoryEvent     = digitalRead(CATEGORY_PIN)   == LOW;
+  stopStartEvent    = digitalRead(STOP_START_PIN) == LOW;
+  teamOneScoreEvent = digitalRead(TEAM_ONE_PIN)   == LOW;
+  teamTwoScoreEvent = digitalRead(TEAM_TWO_PIN)   == LOW;
+  nextEvent         = digitalRead(NEXT_PIN)       == LOW;
 }
 
-bool buttonIsPressed(int pin) {
-  return digitalRead(pin) == LOW;
+void transitionToStarted() {
+  clearEvents();
+  currentState = STARTED;
+}
+
+void transitionToGameOver() {
+  clearEvents();
+  currentMessage = teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
+  currentState = GAME_OVER;
+}
+
+void transitionToStopped() {
+  clearEvents();
+  currentState = STOPPED;
+}
+
+void incrementTeamOneScore() {
+  clearEvents();
+  teamOneScore++;
+}
+
+void incrementTeamTwoScore() {
+  clearEvents();
+  teamTwoScore++;
+}
+
+void nextPhrase() {
+  clearEvents();
+}
+
+bool gameIsWon() {
+  clearEvents();
+  return teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN;
+}
+
+void clearScores() {
+  teamOneScore = teamTwoScore = 0;
+}
+
+bool startNewGame() {
+  return categoryEvent || stopStartEvent;
 }
 
 void loop() {
+
+  switch(currentState) {
+    case GAME_OVER:
+      if(startNewGame()) {
+        clearScores();
+        transitionToStopped();
+      }
+  
+      break;
+    case STOPPED:
+      if(teamOneScoreEvent) {
+        incrementTeamOneScore();
+      } else if(teamTwoScoreEvent) {
+        incrementTeamTwoScore();
+      } else if(stopStartEvent) {
+        transitionToStarted();
+      } else if(nextEvent) {
+        nextPhrase();
+      }
+
+      if(gameIsWon()) {
+        transitionToGameOver();
+      }
+      
+      break;
+    case STARTED:
+      // timer runs
+      // can switch phrases
+      if(stopStartEvent) {
+        transitionToStopped();
+      } else if(nextEvent) {
+        nextPhrase();
+      }
+   
+      break;
+  } 
+
+  view->setPhrase(currentMessage);
   view->setTeamScores(teamOneScore, teamTwoScore);
 }

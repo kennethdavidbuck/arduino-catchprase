@@ -9,7 +9,7 @@ void initializeInterrupt(int pin);
 /**
  *
  */
-bool buttonIsPressed(int pin);
+bool isKeyPressEvent(int pin);
 
 /**
  *
@@ -20,5 +20,21 @@ void handler();
  *
  */
 void debounceHandler();
+
+
+/**
+ *
+ */
+void clearEvents();
+
+/**
+ *
+ */
+void clearScores();
+
+/**
+ *
+ */
+void transitionToStarted();
 
 #endif

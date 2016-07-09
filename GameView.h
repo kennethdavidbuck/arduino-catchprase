@@ -26,7 +26,7 @@ class GameView : public LiquidCrystal {
 
 	public:
 
-		GameView() : LiquidCrystal (7, 8, 9, 10, 11, 12) {
+		GameView() : LiquidCrystal (6, 8, 9, 10, 11, 12) {
 			this->begin(COLUMN_COUNT, ROW_COUNT);
 		}
 
@@ -48,6 +48,14 @@ class GameView : public LiquidCrystal {
 		void setTeamTwoScore(uint8_t score) {
 			this->setCursor(lastColumn(), firstRow());
 			this->print(score);
+		}
+
+		int rowCount() {
+			return ROW_COUNT;
+		}
+
+		int columnCount() {
+			return COLUMN_COUNT;
 		}
 };
 
