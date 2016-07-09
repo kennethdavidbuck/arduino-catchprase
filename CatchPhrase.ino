@@ -2,45 +2,44 @@
 #include "CatchPhrase.h"
 #include "GameView.h"
 
-const String EMPTY        = "                ";
-const String TEAM_ONE_WIN = " TEAM ONE WINS! ";
-const String TEAM_TWO_WIN = " TEAM TWO WINS! ";
-const String SUCCESS      = "    SUCCESS!    ";
-
-const int POINTS_WIN = 7;
-
 volatile unsigned long lastMicros = 0;
 const unsigned long DEBOUNCE_TIME = 100000;
 
-typedef enum Pins {
-  CATEGORY_PIN    = 0,
-  STOP_START_PIN  = 1,
-  TEAM_ONE_PIN    = 2,
-  TEAM_TWO_PIN    = 3,
-  NEXT_PIN        = 7
-};
+const int POINTS_WIN = 7;
 
-typedef enum States {
-  GAME_OVER,
-  STOPPED,
-  STARTED
-};
+// messages
+const String EMPTY             = "                ";
+const String TEAM_ONE_WIN      = " TEAM ONE WINS! ";
+const String TEAM_TWO_WIN      = " TEAM TWO WINS! ";
+const String SUCCESS           = "    SUCCESS!    ";
 
-typedef enum Events {
-  TEAM_ONE_SCORE_EVENT,
-  TEAM_TWO_SCORE_EVENT,
-  CATEGORY_EVENT,
-  STOP_START_EVENT,
-  NEXT_EVENT  
-};
+// interrupt pins
+const int CATEGORY_PIN         = 0;
+const int STOP_START_PIN       = 1;
+const int TEAM_ONE_PIN         = 2;
+const int TEAM_TWO_PIN         = 3;
+const int NEXT_PIN             = 7; 
 
+// game states
+const int OVER                 = 0;
+const int STOPPED              = 1;
+const int STARTED              = 2;
+
+// game events
+const int TEAM_ONE_SCORE_EVENT = 0;
+const int TEAM_TWO_SCORE_EVENT = 1;
+const int CATEGORY_EVENT       = 2;
+const int STOP_START_EVENT     = 3;
+const int NEXT_EVENT           = 4;
+
+// game
 typedef struct Game {
-  volatile int events[5]  = {0, 0, 0, 0, 0};
-  String currentMessage   = EMPTY;
-  int currentState        = STOPPED;
-  int teamOneScore        = 0;
-  int teamTwoScore        = 0;
-  GameView *view          = new GameView();
+  volatile int events[5]       = {0, 0, 0, 0, 0};
+  String currentMessage        = EMPTY;
+  int currentState             = STOPPED;
+  int teamOneScore             = 0;
+  int teamTwoScore             = 0;
+  GameView *view               = new GameView();
 };
 
 // Create the game.
@@ -94,7 +93,7 @@ void transitionToStarted() {
 void transitionToGameOver() {
   clearEvents();
   game.currentMessage = game.teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-  game.currentState = GAME_OVER;
+  game.currentState   = OVER;
 }
 
 void transitionToStopped() {
@@ -140,7 +139,7 @@ bool startNewGame() {
 void loop() {
 
   switch(game.currentState) {
-    case GAME_OVER:
+    case OVER:
       if(startNewGame()) {
         clearPhrase();
         clearScores();
