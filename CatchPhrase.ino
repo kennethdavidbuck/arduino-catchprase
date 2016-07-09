@@ -124,24 +124,22 @@ void nextPhrase() {
 
 bool gameIsWon() {
   clearEvents();
-  
-  if(teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN) {
-    return true;  
-  }
-
-  return false;
+  return teamOneScore == POINTS_WIN || teamTwoScore == POINTS_WIN;
 }
 
 void clearScores() {
-  clearEvents();
   teamOneScore = teamTwoScore = 0;
+}
+
+bool startNewGame() {
+  return categoryEvent || stopStartEvent;
 }
 
 void loop() {
 
   switch(currentState) {
     case GAME_OVER:
-      if(categoryEvent || stopStartEvent) {
+      if(startNewGame()) {
         clearScores();
         transitionToStopped();
       }
