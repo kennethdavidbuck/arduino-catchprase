@@ -8,38 +8,38 @@ const unsigned long DEBOUNCE_TIME = 100000;
 const int POINTS_WIN = 7;
 
 // messages
-const String EMPTY             = "                ";
-const String TEAM_ONE_WIN      = " TEAM ONE WINS! ";
-const String TEAM_TWO_WIN      = " TEAM TWO WINS! ";
-const String SUCCESS           = "    SUCCESS!    ";
+const String EMPTY              = "                ";
+const String TEAM_ONE_WIN       = " TEAM ONE WINS! ";
+const String TEAM_TWO_WIN       = " TEAM TWO WINS! ";
+const String SUCCESS            = "    SUCCESS!    ";
 
 // interrupt pins
-const int CATEGORY_PIN         = 0;
-const int STOP_START_PIN       = 1;
-const int TEAM_ONE_PIN         = 2;
-const int TEAM_TWO_PIN         = 3;
-const int NEXT_PIN             = 7; 
+const int CATEGORY_PIN          = 0;
+const int STOP_START_PIN        = 1;
+const int TEAM_ONE_PIN          = 2;
+const int TEAM_TWO_PIN          = 3;
+const int NEXT_PIN              = 7; 
 
 // game states
-const int OVER                 = 0;
-const int STOPPED              = 1;
-const int STARTED              = 2;
+const int OVER                  = 0;
+const int STOPPED               = 1;
+const int STARTED               = 2;
 
 // game events
-const int TEAM_ONE_SCORE_EVENT = 0;
-const int TEAM_TWO_SCORE_EVENT = 1;
-const int CATEGORY_EVENT       = 2;
-const int STOP_START_EVENT     = 3;
-const int NEXT_EVENT           = 4;
+const int TEAM_ONE_SCORE_EVENT  = 0;
+const int TEAM_TWO_SCORE_EVENT  = 1;
+const int CATEGORY_EVENT        = 2;
+const int STOP_START_EVENT      = 3;
+const int NEXT_EVENT            = 4;
 
 // game
 typedef struct Game {
-  volatile int events[5]       = {0, 0, 0, 0, 0};
-  String currentMessage        = EMPTY;
-  int currentState             = STOPPED;
-  int teamOneScore             = 0;
-  int teamTwoScore             = 0;
-  GameView *view               = new GameView();
+  volatile int events[5]        = {0, 0, 0, 0, 0};
+  String message                = EMPTY;
+  int state                     = STOPPED;
+  int teamOneScore              = 0;
+  int teamTwoScore              = 0;
+  GameView *view                = new GameView();
 };
 
 // Create the game.
@@ -87,18 +87,18 @@ void handler() {
 
 void transitionToStarted() {
   clearEvents();
-  game.currentState = STARTED;
+  game.state = STARTED;
 }
 
 void transitionToGameOver() {
   clearEvents();
-  game.currentMessage = game.teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-  game.currentState   = OVER;
+  game.message = game.teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
+  game.state   = OVER;
 }
 
 void transitionToStopped() {
   clearEvents();
-  game.currentState = STOPPED;
+  game.state = STOPPED;
 }
 
 void incrementTeamOneScore() {
@@ -129,7 +129,7 @@ void clearScores() {
 }
 
 void clearPhrase() {
-  game.currentMessage = EMPTY;
+  game.message = EMPTY;
 }
 
 bool startNewGame() {
@@ -138,7 +138,7 @@ bool startNewGame() {
 
 void loop() {
 
-  switch(game.currentState) {
+  switch(game.state) {
     case OVER:
       if(startNewGame()) {
         clearPhrase();
@@ -173,6 +173,6 @@ void loop() {
       break;
   } 
 
-  game.view->setPhrase(game.currentMessage);
+  game.view->setPhrase(game.message);
   game.view->setTeamScores(game.teamOneScore, game.teamTwoScore);
 }
