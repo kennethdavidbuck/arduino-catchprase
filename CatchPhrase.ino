@@ -16,6 +16,7 @@ typedef struct Game {
 };
 
 // Create the game.
+const int PINS[5] = {PIN_TEAM_ONE, PIN_TEAM_TWO, PIN_CATEGORY, PIN_NEXT};
 volatile unsigned long lastMicros = 0;
 unsigned long lastMillis          = -1;
 int tickTock                      = 0;
@@ -23,11 +24,24 @@ int tickTock                      = 0;
 Game game;
 
 void setup() {
-  initializeInterrupt(PIN_TEAM_ONE, LOW);
-  initializeInterrupt(PIN_TEAM_TWO, LOW);
-  initializeInterrupt(PIN_CATEGORY, LOW);
-  initializeInterrupt(PIN_STOP_START, LOW);
-  initializeInterrupt(PIN_NEXT, LOW);
+  // we wont be toggling the stop/start pin.
+  attachInterrupt(digitalPinToInterrupt(PIN_STOP_START), debounceHandler, LOW);
+  pinMode(PIN_STOP_START, INPUT_PULLUP);
+  
+  transitionToStopped();
+}
+
+void attachInterrupts() {
+  for(int i = 0; i < 4; i += 1) {
+    attachInterrupt(digitalPinToInterrupt(PINS[i]), debounceHandler, LOW);
+    pinMode(PINS[i], INPUT_PULLUP);
+  }
+}
+
+void detachInterrupts() {
+  for(int i = 0; i < 4; i += 1) {
+    detachInterrupt(digitalPinToInterrupt(PINS[i]));
+  }
 }
 
 void clearEvents() {
@@ -36,11 +50,6 @@ void clearEvents() {
   game.events[EVENT_CATEGORY]       = 0;
   game.events[EVENT_STOP_START]     = 0;
   game.events[EVENT_NEXT]           = 0;
-}
-
-void initializeInterrupt(int pin, int state) {
-  attachInterrupt(digitalPinToInterrupt(pin), debounceHandler, state);
-  pinMode(pin, INPUT_PULLUP);
 }
 
 void debounceHandler() {
@@ -63,18 +72,21 @@ void handler() {
 void transitionToStarted() {
   clearEvents();
   game.state = STATE_STARTED;
-}
-
-void transitionToGameOver() {
-  clearEvents();
-  game.message = game.teamOneScore == POINTS_WIN ? MESSAGE_TEAM_ONE_WIN : MESSAGE_TEAM_TWO_WIN;
-  game.state   = STATE_OVER;
+  detachInterrupts();
 }
 
 void transitionToStopped() {
   clearEvents();
   lastMillis = TIMER_NEW_ROUND;
   game.state = STATE_STOPPED;
+  attachInterrupts();
+}
+
+void transitionToGameOver() {
+  clearEvents();
+  game.message = game.teamOneScore == POINTS_WIN ? MESSAGE_TEAM_ONE_WIN : MESSAGE_TEAM_TWO_WIN;
+  game.state   = STATE_OVER;
+  attachInterrupts();
 }
 
 void playTeamOneSound() {
