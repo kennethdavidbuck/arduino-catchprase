@@ -146,9 +146,7 @@ void loop() {
       }
       
       break;
-    case STATE_STARTED:
-      game.message = MESSAGE_SUCCESS;
-    
+    case STATE_STARTED:    
       if(game.events[EVENT_STOP_START]) {
         transitionToStopped();
       } else if(game.events[EVENT_NEXT]) {
