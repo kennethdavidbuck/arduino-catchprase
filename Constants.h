@@ -26,8 +26,8 @@ const int PINS[PINS_LENGTH] = {
 // game sound notes
 #define NOTE_TEAM_ONE         NOTE_C4
 #define NOTE_TEAM_TWO         NOTE_CS4
-#define NOTE_CLOCK_LOW        NOTE_C4
-#define NOTE_CLOCK_HIGH       NOTE_CS4
+#define NOTE_CLOCK_TICK       NOTE_C4
+#define NOTE_CLOCK_TOCK       NOTE_CS4
 
 // sound durations
 #define INCREMENT_DURATION    16

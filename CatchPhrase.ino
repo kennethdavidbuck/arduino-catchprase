@@ -103,11 +103,11 @@ void playTeamTwoSound() {
 }
 
 void playClockTick() {
-  tone(PIN_SPEAKER, NOTE_CLOCK_LOW, 1000 / INCREMENT_DURATION);
+  tone(PIN_SPEAKER, NOTE_CLOCK_TICK, 1000 / INCREMENT_DURATION);
 }
 
 void playClockTock() {
-  tone(PIN_SPEAKER, NOTE_CLOCK_HIGH, 1000 / INCREMENT_DURATION);
+  tone(PIN_SPEAKER, NOTE_CLOCK_TOCK, 1000 / INCREMENT_DURATION);
 }
 
 void incrementTeamOneScore() {
