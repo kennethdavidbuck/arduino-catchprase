@@ -10,6 +10,14 @@
 #define PIN_TEAM_TWO          3
 #define PIN_NEXT              7
 
+const int PINS_LENGTH       = 4;
+const int PINS[PINS_LENGTH] = {
+  PIN_TEAM_ONE,
+  PIN_TEAM_TWO,
+  PIN_CATEGORY,
+  PIN_NEXT
+};
+
 // sound pins
 #define PIN_SPEAKER           5
 

@@ -4,8 +4,6 @@
 #include "GameView.h"
 #include "Pitches.h"
 
-const int PINS[5] = {PIN_TEAM_ONE, PIN_TEAM_TWO, PIN_CATEGORY, PIN_NEXT};
-const int PINS_LENGTH             = 4;
 volatile unsigned long lastMicros = 0;
 unsigned long lastMillis          = -1;
 int tickTock                      = 0;
