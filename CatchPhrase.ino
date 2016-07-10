@@ -101,11 +101,11 @@ void playTeamTwoSound() {
   tone(PIN_SPEAKER, NOTE_TEAM_TWO, 1000 / INCREMENT_DURATION);
 }
 
-void playClockLow() {
+void playClockTick() {
   tone(PIN_SPEAKER, NOTE_CLOCK_LOW, 1000 / INCREMENT_DURATION);
 }
 
-void playClockHigh() {
+void playClockTock() {
   tone(PIN_SPEAKER, NOTE_CLOCK_HIGH, 1000 / INCREMENT_DURATION);
 }
 
@@ -155,10 +155,10 @@ void updateClock() {
   if(gameClock.lastMillis == TIMER_NEW_ROUND || timeDifference > 500) {
     if(gameClock.tickTock == TIMER_TICK) {
       gameClock.tickTock = TIMER_TOCK;
-      playClockLow();
+      playClockTick();
     } else {
       gameClock.tickTock = TIMER_TICK;
-      playClockHigh();
+      playClockTock();
     }
     
     gameClock.lastMillis = currentMillis;

@@ -23,6 +23,10 @@ void playTeamOneSound();
 
 void playTeamTwoSound();
 
+void playClockTock();
+
+void playClockTalk();
+
 void incrementTeamOneScore();
 
 void incrementTeamTwoScore();
