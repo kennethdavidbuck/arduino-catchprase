@@ -5,14 +5,14 @@
 #include "Pitches.h"
 
 typedef struct Game {
-  volatile int events[5]      = {0, 0, 0, 0, 0};
-  String message              = MESSAGE_EMPTY;
-  int state                   = STATE_STOPPED;
-  int teamOneScore            = 0;
-  int teamTwoScore            = 0;
-  int categoryIndex           = 0;
-  int phraseIndex             = 0;
-  GameView *view              = new GameView();
+  volatile int events[5] = {0, 0, 0, 0, 0};
+  String message         = MESSAGE_EMPTY;
+  int state              = STATE_STOPPED;
+  int teamOneScore       = 0;
+  int teamTwoScore       = 0;
+  int categoryIndex      = 0;
+  int phraseIndex        = 0;
+  GameView *view         = new GameView();
 };
 
 // Create the game.
