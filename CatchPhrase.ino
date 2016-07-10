@@ -17,8 +17,7 @@ typedef struct Game {
 
 // Create the game.
 volatile unsigned long lastMicros = 0;
-unsigned long lastMillis = -1;
-unsigned long seconds;
+unsigned long lastMillis          = -1;
 
 Game game;
 
