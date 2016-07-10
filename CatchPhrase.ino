@@ -76,7 +76,7 @@ void transitionToStarted() {
   clearEvents();
   gameClock.tickTock    = TIMER_TICK;
   gameClock.lastMillis  = TIMER_NEW_ROUND;
-  game.state = STATE_STARTED;
+  game.state            = STATE_STARTED;
   detachInterrupts();
 }
 
