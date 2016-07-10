@@ -133,10 +133,12 @@ void incrementTeamTwoScore() {
 }
 
 String nextPhrase() {
+  clearEvents();
   return MESSAGE_EMPTY;
 }
 
 String nextCategory() {
+  clearEvents();
   return MESSAGE_EMPTY;
 }
 
