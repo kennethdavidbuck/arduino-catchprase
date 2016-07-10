@@ -1,6 +1,7 @@
 //
 #define TIMER_DEBOUNCE        100000
 #define POINTS_WIN            7
+#define TIMER_NEW_ROUND       -1
 
 // interrupt pins
 #define PIN_CATEGORY          0
@@ -15,6 +16,7 @@
 // game sound notes
 #define NOTE_TEAM_ONE         NOTE_C5
 #define NOTE_TEAM_TWO         NOTE_CS5
+#define NOTE_CLOCK_LOW        NOTE_B5
 
 // sound durations
 #define INCREMENT_DURATION    16

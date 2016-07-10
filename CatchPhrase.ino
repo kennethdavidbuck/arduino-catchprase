@@ -17,7 +17,7 @@ typedef struct Game {
 
 // Create the game.
 volatile unsigned long lastMicros = 0;
-unsigned long lastSecond = 0;
+unsigned long lastMillis = -1;
 unsigned long seconds;
 
 Game game;
@@ -62,7 +62,6 @@ void handler() {
 
 void transitionToStarted() {
   clearEvents();
-  lastSecond = millis();
   game.state = STATE_STARTED;
 }
 
@@ -74,6 +73,7 @@ void transitionToGameOver() {
 
 void transitionToStopped() {
   clearEvents();
+  lastMillis = TIMER_NEW_ROUND;
   game.state = STATE_STOPPED;
 }
 
@@ -83,6 +83,10 @@ void playTeamOneSound() {
 
 void playTeamTwoSound() {
   tone(PIN_SPEAKER, NOTE_TEAM_TWO, 1000 / INCREMENT_DURATION);
+}
+
+void playClockLowSound() {
+  tone(PIN_SPEAKER, NOTE_CLOCK_LOW, 1000 / INCREMENT_DURATION);
 }
 
 void incrementTeamOneScore() {
@@ -124,6 +128,13 @@ bool startNewGame() {
   return game.events[EVENT_CATEGORY] || game.events[EVENT_STOP_START];
 }
 
+void updateClock() {
+  if(lastMillis == -1 || millis() - lastMillis > 1000) {
+    lastMillis = millis();
+    playClockLowSound();
+  }
+}
+
 void loop() {
   switch(game.state) {
     case STATE_OVER:
@@ -151,11 +162,8 @@ void loop() {
       
       break;
     case STATE_STARTED:
-      if(millis() - lastSecond > 1000) {
-        playTeamOneSound();
-        lastSecond = millis();
-      }
-        
+      updateClock();
+      
       if(game.events[EVENT_STOP_START]) {
         transitionToStopped();
       } else if(game.events[EVENT_NEXT]) {
