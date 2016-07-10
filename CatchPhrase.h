@@ -1,40 +1,37 @@
 #ifndef CATCH_PHRASE_H
 #define CATCH_PHRASE_H
 
-/**
- *
- */
-void initializeInterrupt(int pin);
 
-/**
- *
- */
-bool isKeyPressEvent(int pin);
+void initializeInterrupt(int pin, int state);
 
-/**
- *
- */
-void handler();
-
-/**
- *
- */
 void debounceHandler();
 
+void handler();
 
-/**
- *
- */
-void clearEvents();
+void transitionToStarted();
 
-/**
- *
- */
+void transitionToGameOver();
+
+void transitionToStopped();
+
+void playTeamOneSound();
+
+void playTeamTwoSound();
+
+void incrementTeamOneScore();
+
+void incrementTeamTwoScore();
+
+String nextPhrase();
+
+String nextCategory();
+
+bool gameIsWon();
+
 void clearScores();
 
-/**
- *
- */
-void transitionToStarted();
+void clearPhrase();
+
+bool startNewGame();
 
 #endif
