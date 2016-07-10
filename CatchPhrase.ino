@@ -4,9 +4,11 @@
 #include "GameView.h"
 #include "Pitches.h"
 
-volatile unsigned long lastMicros = 0;
-unsigned long lastMillis          = -1;
-int tickTock                      = 0;
+typedef struct GameClock {
+  volatile unsigned long lastMicros = 0;
+  unsigned long lastMillis          = -1;
+  int tickTock                      = 0; 
+};
 
 typedef struct Game {
   volatile int events[5] = {0, 0, 0, 0, 0};
@@ -20,6 +22,7 @@ typedef struct Game {
 };
 
 // Create the game.
+GameClock gameClock;
 Game game;
 
 void setup() {
@@ -55,10 +58,10 @@ void clearEvents() {
 void debounceHandler() {
   unsigned long currentMicros = (long) micros();
   
-  if(currentMicros - lastMicros >= TIMER_DEBOUNCE) {
+  if(currentMicros - gameClock.lastMicros >= TIMER_DEBOUNCE) {
     handler();
-    lastMicros = currentMicros;
-  }  
+    gameClock.lastMicros = currentMicros;
+  } 
 }
 
 void handler() {
@@ -71,8 +74,8 @@ void handler() {
 
 void transitionToStarted() {
   clearEvents();
-  tickTock    = 0;
-  lastMillis  = TIMER_NEW_ROUND;
+  gameClock.tickTock    = 0;
+  gameClock.lastMillis  = TIMER_NEW_ROUND;
   game.state = STATE_STARTED;
   detachInterrupts();
 }
@@ -147,18 +150,18 @@ bool startNewGame() {
 
 void updateClock() {
   unsigned long currentMillis = millis();
-  unsigned long timeDifference = currentMillis - lastMillis;
+  unsigned long timeDifference = currentMillis - gameClock.lastMillis;
   
-  if(lastMillis == TIMER_NEW_ROUND || timeDifference > 500) {
-    if(tickTock == 0) {
-      tickTock = 1;
+  if(gameClock.lastMillis == TIMER_NEW_ROUND || timeDifference > 500) {
+    if(gameClock.tickTock == 0) {
+      gameClock.tickTock = 1;
       playClockLow();
     } else {
-      tickTock = 0;
+      gameClock.tickTock = 0;
       playClockHigh();
     }
     
-    lastMillis = currentMillis;
+    gameClock.lastMillis = currentMillis;
   }
 }
 
