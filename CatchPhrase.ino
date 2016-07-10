@@ -24,7 +24,7 @@ int tickTock                      = 0;
 Game game;
 
 void setup() {
-  // we wont be toggling the stop/start pin.
+  // we wont be toggling the stop/start pin, so we attach it here once.
   attachInterrupt(digitalPinToInterrupt(PIN_STOP_START), debounceHandler, LOW);
   pinMode(PIN_STOP_START, INPUT_PULLUP);
   
