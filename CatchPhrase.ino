@@ -18,8 +18,8 @@
 #define SPEAKER_PIN           5
 
 // game sound notes
-#define TEAM_ONE_NOTE         NOTE_CS5
-#define TEAM_TWO_NOTE         NOTE_DS5
+#define TEAM_ONE_NOTE         NOTE_C5
+#define TEAM_TWO_NOTE         NOTE_CS5
 // sound durations
 #define INCREMENT_DURATION    16
 
