@@ -4,6 +4,11 @@
 #include "GameView.h"
 #include "Pitches.h"
 
+const int PINS[5] = {PIN_TEAM_ONE, PIN_TEAM_TWO, PIN_CATEGORY, PIN_NEXT};
+volatile unsigned long lastMicros = 0;
+unsigned long lastMillis          = -1;
+int tickTock                      = 0;
+
 typedef struct Game {
   volatile int events[5] = {0, 0, 0, 0, 0};
   String message         = MESSAGE_EMPTY;
@@ -16,11 +21,6 @@ typedef struct Game {
 };
 
 // Create the game.
-const int PINS[5] = {PIN_TEAM_ONE, PIN_TEAM_TWO, PIN_CATEGORY, PIN_NEXT};
-volatile unsigned long lastMicros = 0;
-unsigned long lastMillis          = -1;
-int tickTock                      = 0;
-
 Game game;
 
 void setup() {
