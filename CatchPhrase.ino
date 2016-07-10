@@ -71,14 +71,14 @@ void handler() {
 
 void transitionToStarted() {
   clearEvents();
+  tickTock    = 0;
+  lastMillis  = TIMER_NEW_ROUND;
   game.state = STATE_STARTED;
   detachInterrupts();
 }
 
 void transitionToStopped() {
   clearEvents();
-  tickTock    = 0;
-  lastMillis  = TIMER_NEW_ROUND;
   game.state  = STATE_STOPPED;
   attachInterrupts();
 }
