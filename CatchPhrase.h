@@ -1,7 +1,6 @@
 #ifndef CATCH_PHRASE_H
 #define CATCH_PHRASE_H
 
-
 void initializeInterrupt(int pin, int state);
 
 void debounceHandler();
