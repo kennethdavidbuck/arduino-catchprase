@@ -1,5 +1,7 @@
 //
 #define TIMER_DEBOUNCE        100000
+#define TIMER_TICK            0
+#define TIMER_TOCK            1
 #define POINTS_WIN            7
 #define TIMER_NEW_ROUND       -1
 
@@ -9,6 +11,14 @@
 #define PIN_TEAM_ONE          2
 #define PIN_TEAM_TWO          3
 #define PIN_NEXT              7
+#define PINS_LENGTH           4
+
+const int PINS[PINS_LENGTH] = {
+  PIN_TEAM_ONE,
+  PIN_TEAM_TWO,
+  PIN_CATEGORY,
+  PIN_NEXT
+};
 
 // sound pins
 #define PIN_SPEAKER           5
@@ -39,3 +49,4 @@
 #define EVENT_CATEGORY        2
 #define EVENT_STOP_START      3
 #define EVENT_NEXT            4
+#define EVENTS_LENGTH         5

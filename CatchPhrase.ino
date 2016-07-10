@@ -4,6 +4,12 @@
 #include "GameView.h"
 #include "Pitches.h"
 
+typedef struct GameClock {
+  volatile unsigned long lastMicros = 0;
+  unsigned long lastMillis          = -1;
+  int tickTock                      = TIMER_TICK;
+};
+
 typedef struct Game {
   volatile int events[5] = {0, 0, 0, 0, 0};
   String message         = MESSAGE_EMPTY;
@@ -16,40 +22,46 @@ typedef struct Game {
 };
 
 // Create the game.
-volatile unsigned long lastMicros = 0;
-unsigned long lastMillis          = -1;
-int tickTock                      = 0;
-
+GameClock gameClock;
 Game game;
 
 void setup() {
-  initializeInterrupt(PIN_TEAM_ONE, LOW);
-  initializeInterrupt(PIN_TEAM_TWO, LOW);
-  initializeInterrupt(PIN_CATEGORY, LOW);
-  initializeInterrupt(PIN_STOP_START, LOW);
-  initializeInterrupt(PIN_NEXT, LOW);
+  // we wont be toggling the stop/start pin, so we attach the interrupt here once.
+  attachStopStartInterrupt();
+  transitionToStopped();
+}
+
+void attachStopStartInterrupt() {
+  attachInterrupt(digitalPinToInterrupt(PIN_STOP_START), debounceHandler, LOW);
+  pinMode(PIN_STOP_START, INPUT_PULLUP);
+}
+
+void attachInterrupts() {
+  for(int i = 0; i < PINS_LENGTH; i += 1) {
+    attachInterrupt(digitalPinToInterrupt(PINS[i]), debounceHandler, LOW);
+    pinMode(PINS[i], INPUT_PULLUP);
+  }
+}
+
+void detachInterrupts() {
+  for(int i = 0; i < PINS_LENGTH; i += 1) {
+    detachInterrupt(digitalPinToInterrupt(PINS[i]));
+  }
 }
 
 void clearEvents() {
-  game.events[EVENT_TEAM_ONE_SCORE] = 0;
-  game.events[EVENT_TEAM_TWO_SCORE] = 0;
-  game.events[EVENT_CATEGORY]       = 0;
-  game.events[EVENT_STOP_START]     = 0;
-  game.events[EVENT_NEXT]           = 0;
-}
-
-void initializeInterrupt(int pin, int state) {
-  attachInterrupt(digitalPinToInterrupt(pin), debounceHandler, state);
-  pinMode(pin, INPUT_PULLUP);
+  for(int i = 0; i < EVENTS_LENGTH; i += 1) {
+    game.events[i] = 0;
+  }
 }
 
 void debounceHandler() {
   unsigned long currentMicros = (long) micros();
   
-  if(currentMicros - lastMicros >= TIMER_DEBOUNCE) {
+  if(currentMicros - gameClock.lastMicros >= TIMER_DEBOUNCE) {
     handler();
-    lastMicros = currentMicros;
-  }  
+    gameClock.lastMicros = currentMicros;
+  } 
 }
 
 void handler() {
@@ -62,19 +74,23 @@ void handler() {
 
 void transitionToStarted() {
   clearEvents();
+  gameClock.tickTock    = TIMER_TICK;
+  gameClock.lastMillis  = TIMER_NEW_ROUND;
   game.state = STATE_STARTED;
+  detachInterrupts();
+}
+
+void transitionToStopped() {
+  clearEvents();
+  game.state  = STATE_STOPPED;
+  attachInterrupts();
 }
 
 void transitionToGameOver() {
   clearEvents();
   game.message = game.teamOneScore == POINTS_WIN ? MESSAGE_TEAM_ONE_WIN : MESSAGE_TEAM_TWO_WIN;
   game.state   = STATE_OVER;
-}
-
-void transitionToStopped() {
-  clearEvents();
-  lastMillis = TIMER_NEW_ROUND;
-  game.state = STATE_STOPPED;
+  attachInterrupts();
 }
 
 void playTeamOneSound() {
@@ -85,11 +101,11 @@ void playTeamTwoSound() {
   tone(PIN_SPEAKER, NOTE_TEAM_TWO, 1000 / INCREMENT_DURATION);
 }
 
-void playClockLow() {
+void playClockTick() {
   tone(PIN_SPEAKER, NOTE_CLOCK_LOW, 1000 / INCREMENT_DURATION);
 }
 
-void playClockHigh() {
+void playClockTock() {
   tone(PIN_SPEAKER, NOTE_CLOCK_HIGH, 1000 / INCREMENT_DURATION);
 }
 
@@ -134,18 +150,18 @@ bool startNewGame() {
 
 void updateClock() {
   unsigned long currentMillis = millis();
-  unsigned long timeDifference = currentMillis - lastMillis;
+  unsigned long timeDifference = currentMillis - gameClock.lastMillis;
   
-  if(lastMillis == TIMER_NEW_ROUND || timeDifference > 500) {
-    if(tickTock == 0) {
-      tickTock = 1;
-      playClockLow();
+  if(gameClock.lastMillis == TIMER_NEW_ROUND || timeDifference > 500) {
+    if(gameClock.tickTock == TIMER_TICK) {
+      gameClock.tickTock = TIMER_TOCK;
+      playClockTick();
     } else {
-      tickTock = 0;
-      playClockHigh();
+      gameClock.tickTock = TIMER_TICK;
+      playClockTock();
     }
     
-    lastMillis = currentMillis;
+    gameClock.lastMillis = currentMillis;
   }
 }
 
