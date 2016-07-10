@@ -47,7 +47,7 @@ void detachInterrupts() {
 }
 
 void clearEvents() {
-  for(int i = 0; i < 5; i += 1) {
+  for(int i = 0; i < EVENTS_LENGTH; i += 1) {
     game.events[i] = 0;
   }
 }

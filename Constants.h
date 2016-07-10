@@ -47,3 +47,4 @@ const int PINS[PINS_LENGTH] = {
 #define EVENT_CATEGORY        2
 #define EVENT_STOP_START      3
 #define EVENT_NEXT            4
+#define EVENTS_LENGTH         5
