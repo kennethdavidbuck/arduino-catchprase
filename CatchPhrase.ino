@@ -8,44 +8,45 @@
 #define POINTS_WIN            7
 
 // interrupt pins
-#define CATEGORY_PIN          0
-#define STOP_START_PIN        1
-#define TEAM_ONE_PIN          2
-#define TEAM_TWO_PIN          3
-#define NEXT_PIN              7
+#define PIN_CATEGORY          0
+#define PIN_STOP_START        1
+#define PIN_TEAM_ONE          2
+#define PIN_TEAM_TWO          3
+#define PIN_NEXT              7
 
 // sound pins
-#define SPEAKER_PIN           5
+#define PIN_SPEAKER           5
 
 // game sound notes
-#define TEAM_ONE_NOTE         NOTE_C5
-#define TEAM_TWO_NOTE         NOTE_CS5
+#define NOTE_TEAM_ONE         NOTE_C5
+#define NOTE_TEAM_TWO         NOTE_CS5
+
 // sound durations
 #define INCREMENT_DURATION    16
 
 // game messages
-#define EMPTY                  "                "
-#define TEAM_ONE_WIN           " TEAM ONE WINS! "
-#define TEAM_TWO_WIN           " TEAM TWO WINS! "
-#define SUCCESS                "    SUCCESS!    "
+#define MESSAGE_EMPTY          "                "
+#define MESSAGE_TEAM_ONE_WIN   " TEAM ONE WINS! "
+#define MESSAGE_TEAM_TWO_WIN   " TEAM TWO WINS! "
+#define MESSAGE_SUCCESS        "    SUCCESS!    "
 
 // game states
-#define OVER_STATE            0
-#define STOPPED_STATE         1
-#define STARTED_STATE         2
+#define STATE_OVER            0
+#define STATE_STOPPED         1
+#define STATE_STARTED         2
 
 // game events
-#define TEAM_ONE_SCORE_EVENT  0
-#define TEAM_TWO_SCORE_EVENT  1
-#define CATEGORY_EVENT        2
-#define STOP_START_EVENT      3
-#define NEXT_EVENT            4
+#define EVENT_TEAM_ONE_SCORE  0
+#define EVENT_TEAM_TWO_SCORE  1
+#define EVENT_CATEGORY        2
+#define EVENT_STOP_START      3
+#define EVENT_NEXT            4
 
 // game
 typedef struct Game {
   volatile int events[5]      = {0, 0, 0, 0, 0};
-  String message              = EMPTY;
-  int state                   = STOPPED_STATE;
+  String message              = MESSAGE_EMPTY;
+  int state                   = STATE_STOPPED;
   int teamOneScore            = 0;
   int teamTwoScore            = 0;
   int categoryIndex           = 0;
@@ -58,19 +59,19 @@ volatile unsigned long lastMicros = 0;
 Game game;
 
 void setup() {
-  initializeInterrupt(CATEGORY_PIN, LOW);
-  initializeInterrupt(STOP_START_PIN, LOW);
-  initializeInterrupt(TEAM_ONE_PIN, LOW);
-  initializeInterrupt(TEAM_TWO_PIN, LOW);
-  initializeInterrupt(NEXT_PIN, LOW);
+  initializeInterrupt(PIN_CATEGORY, LOW);
+  initializeInterrupt(PIN_STOP_START, LOW);
+  initializeInterrupt(PIN_TEAM_ONE, LOW);
+  initializeInterrupt(PIN_TEAM_TWO, LOW);
+  initializeInterrupt(PIN_NEXT, LOW);
 }
 
 void clearEvents() {
-  game.events[TEAM_ONE_SCORE_EVENT] = 0;
-  game.events[TEAM_TWO_SCORE_EVENT] = 0;
-  game.events[CATEGORY_EVENT]       = 0;
-  game.events[STOP_START_EVENT]     = 0;
-  game.events[NEXT_EVENT]           = 0;
+  game.events[EVENT_TEAM_ONE_SCORE] = 0;
+  game.events[EVENT_TEAM_TWO_SCORE] = 0;
+  game.events[EVENT_CATEGORY]       = 0;
+  game.events[EVENT_STOP_START]     = 0;
+  game.events[EVENT_NEXT]           = 0;
 }
 
 void initializeInterrupt(int pin, int state) {
@@ -88,35 +89,35 @@ void debounceHandler() {
 }
 
 void handler() {
-  game.events[TEAM_ONE_SCORE_EVENT] = digitalRead(TEAM_ONE_PIN)   == LOW;
-  game.events[TEAM_TWO_SCORE_EVENT] = digitalRead(TEAM_TWO_PIN)   == LOW;
-  game.events[CATEGORY_EVENT]       = digitalRead(CATEGORY_PIN)   == LOW;
-  game.events[STOP_START_EVENT]     = digitalRead(STOP_START_PIN) == LOW;
-  game.events[NEXT_EVENT]           = digitalRead(NEXT_PIN)       == LOW;
+  game.events[EVENT_TEAM_ONE_SCORE] = digitalRead(PIN_TEAM_ONE)   == LOW;
+  game.events[EVENT_TEAM_TWO_SCORE] = digitalRead(PIN_TEAM_TWO)   == LOW;
+  game.events[EVENT_CATEGORY]       = digitalRead(PIN_CATEGORY)   == LOW;
+  game.events[EVENT_STOP_START]     = digitalRead(PIN_STOP_START) == LOW;
+  game.events[EVENT_NEXT]           = digitalRead(PIN_NEXT)       == LOW;
 }
 
 void transitionToStarted() {
   clearEvents();
-  game.state = STARTED_STATE;
+  game.state = STATE_STARTED;
 }
 
 void transitionToGameOver() {
   clearEvents();
-  game.message = game.teamOneScore == POINTS_WIN ? TEAM_ONE_WIN : TEAM_TWO_WIN;
-  game.state   = OVER_STATE;
+  game.message = game.teamOneScore == POINTS_WIN ? MESSAGE_TEAM_ONE_WIN : MESSAGE_TEAM_TWO_WIN;
+  game.state   = STATE_OVER;
 }
 
 void transitionToStopped() {
   clearEvents();
-  game.state = STOPPED_STATE;
+  game.state = STATE_STOPPED;
 }
 
 void playTeamOneSound() {
-  tone(SPEAKER_PIN, TEAM_ONE_NOTE, 1000 / INCREMENT_DURATION);
+  tone(PIN_SPEAKER, NOTE_TEAM_ONE, 1000 / INCREMENT_DURATION);
 }
 
 void playTeamTwoSound() {
-  tone(SPEAKER_PIN, TEAM_TWO_NOTE, 1000 / INCREMENT_DURATION);
+  tone(PIN_SPEAKER, NOTE_TEAM_TWO, 1000 / INCREMENT_DURATION);
 }
 
 void incrementTeamOneScore() {
@@ -132,11 +133,11 @@ void incrementTeamTwoScore() {
 }
 
 String nextPhrase() {
-  return EMPTY;
+  return MESSAGE_EMPTY;
 }
 
 String nextCategory() {
-  return EMPTY;
+  return MESSAGE_EMPTY;
 }
 
 bool gameIsWon() {
@@ -149,16 +150,16 @@ void clearScores() {
 }
 
 void clearPhrase() {
-  game.message = EMPTY;
+  game.message = MESSAGE_EMPTY;
 }
 
 bool startNewGame() {
-  return game.events[CATEGORY_EVENT] || game.events[STOP_START_EVENT];
+  return game.events[EVENT_CATEGORY] || game.events[EVENT_STOP_START];
 }
 
 void loop() {
   switch(game.state) {
-    case OVER_STATE:
+    case STATE_OVER:
       if(startNewGame()) {
         clearPhrase();
         clearScores();
@@ -166,14 +167,14 @@ void loop() {
       }
   
       break;
-    case STOPPED_STATE:
-      if(game.events[TEAM_ONE_SCORE_EVENT]) {
+    case STATE_STOPPED:
+      if(game.events[EVENT_TEAM_ONE_SCORE]) {
         incrementTeamOneScore();
-      } else if(game.events[TEAM_TWO_SCORE_EVENT]) {
+      } else if(game.events[EVENT_TEAM_TWO_SCORE]) {
         incrementTeamTwoScore();
-      } else if(game.events[STOP_START_EVENT]) {
+      } else if(game.events[EVENT_STOP_START]) {
         transitionToStarted();
-      } else if(game.events[CATEGORY_EVENT]) {
+      } else if(game.events[EVENT_CATEGORY]) {
         
       }
 
@@ -182,10 +183,10 @@ void loop() {
       }
       
       break;
-    case STARTED_STATE:
-      if(game.events[STOP_START_EVENT]) {
+    case STATE_STARTED:
+      if(game.events[EVENT_STOP_START]) {
         transitionToStopped();
-      } else if(game.events[NEXT_EVENT]) {
+      } else if(game.events[EVENT_NEXT]) {
         nextPhrase();
       }
    
