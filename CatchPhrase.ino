@@ -23,10 +23,10 @@ int tickTock                      = 0;
 Game game;
 
 void setup() {
-  initializeInterrupt(PIN_CATEGORY, LOW);
-  initializeInterrupt(PIN_STOP_START, LOW);
   initializeInterrupt(PIN_TEAM_ONE, LOW);
   initializeInterrupt(PIN_TEAM_TWO, LOW);
+  initializeInterrupt(PIN_CATEGORY, LOW);
+  initializeInterrupt(PIN_STOP_START, LOW);
   initializeInterrupt(PIN_NEXT, LOW);
 }
 
