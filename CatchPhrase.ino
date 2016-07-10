@@ -133,7 +133,8 @@ bool startNewGame() {
 }
 
 void updateClock() {
-  unsigned long timeDifference = millis() - lastMillis;
+  unsigned long currentMillis = millis();
+  unsigned long timeDifference = currentMillis - lastMillis;
   
   if(lastMillis == TIMER_NEW_ROUND || timeDifference > 500) {
     if(tickTock == 0) {
@@ -144,7 +145,7 @@ void updateClock() {
       playClockHigh();
     }
     
-    lastMillis = millis();
+    lastMillis = currentMillis;
   }
 }
 
