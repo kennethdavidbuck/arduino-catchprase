@@ -7,7 +7,7 @@
 typedef struct GameClock {
   volatile unsigned long lastMicros = 0;
   unsigned long lastMillis          = -1;
-  int tickTock                      = 0; 
+  int tickTock                      = TIMER_TICK;
 };
 
 typedef struct Game {
@@ -74,7 +74,7 @@ void handler() {
 
 void transitionToStarted() {
   clearEvents();
-  gameClock.tickTock    = 0;
+  gameClock.tickTock    = TIMER_TICK;
   gameClock.lastMillis  = TIMER_NEW_ROUND;
   game.state = STATE_STARTED;
   detachInterrupts();
@@ -153,11 +153,11 @@ void updateClock() {
   unsigned long timeDifference = currentMillis - gameClock.lastMillis;
   
   if(gameClock.lastMillis == TIMER_NEW_ROUND || timeDifference > 500) {
-    if(gameClock.tickTock == 0) {
-      gameClock.tickTock = 1;
+    if(gameClock.tickTock == TIMER_TICK) {
+      gameClock.tickTock = TIMER_TOCK;
       playClockLow();
     } else {
-      gameClock.tickTock = 0;
+      gameClock.tickTock = TIMER_TICK;
       playClockHigh();
     }
     

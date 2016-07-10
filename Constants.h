@@ -1,5 +1,7 @@
 //
 #define TIMER_DEBOUNCE        100000
+#define TIMER_TICK            0
+#define TIMER_TOCK            1
 #define POINTS_WIN            7
 #define TIMER_NEW_ROUND       -1
 
