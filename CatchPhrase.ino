@@ -17,6 +17,9 @@ typedef struct Game {
 
 // Create the game.
 volatile unsigned long lastMicros = 0;
+unsigned long lastSecond = 0;
+unsigned long seconds;
+
 Game game;
 
 void setup() {
@@ -146,7 +149,12 @@ void loop() {
       }
       
       break;
-    case STATE_STARTED:    
+    case STATE_STARTED:
+      if(millis() - lastSecond > 1000) {
+        playTeamOneSound();
+        lastSecond += 1000;
+      }
+        
       if(game.events[EVENT_STOP_START]) {
         transitionToStopped();
       } else if(game.events[EVENT_NEXT]) {
