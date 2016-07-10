@@ -77,8 +77,9 @@ void transitionToStarted() {
 
 void transitionToStopped() {
   clearEvents();
-  lastMillis = TIMER_NEW_ROUND;
-  game.state = STATE_STOPPED;
+  tickTock    = 0;
+  lastMillis  = TIMER_NEW_ROUND;
+  game.state  = STATE_STOPPED;
   attachInterrupts();
 }
 
