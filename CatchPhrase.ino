@@ -24,7 +24,7 @@ typedef struct Game {
 Game game;
 
 void setup() {
-  // we wont be toggling the stop/start pin, so we attach it here once.
+  // we wont be toggling the stop/start pin, so we attach the interrupt here once.
   attachStopStartInterrupt();
   transitionToStopped();
 }
