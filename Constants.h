@@ -9,8 +9,8 @@
 #define PIN_TEAM_ONE          2
 #define PIN_TEAM_TWO          3
 #define PIN_NEXT              7
+#define PINS_LENGTH           4
 
-const int PINS_LENGTH       = 4;
 const int PINS[PINS_LENGTH] = {
   PIN_TEAM_ONE,
   PIN_TEAM_TWO,
