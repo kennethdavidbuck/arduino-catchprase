@@ -166,7 +166,7 @@ void loop() {
       } else if(game.events[EVENT_STOP_START]) {
         transitionToStarted();
       } else if(game.events[EVENT_CATEGORY]) {
-        
+        nextCategory();
       }
 
       if(gameIsWon()) {
