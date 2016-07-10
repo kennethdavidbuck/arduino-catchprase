@@ -157,7 +157,6 @@ bool startNewGame() {
 }
 
 void loop() {
-
   switch(game.state) {
     case OVER_STATE:
       if(startNewGame()) {
