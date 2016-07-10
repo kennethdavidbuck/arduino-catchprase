@@ -5,7 +5,6 @@
 #include "Pitches.h"
 
 typedef struct GameClock {
-  volatile unsigned long lastMicros = 0;
   unsigned long lastMillis          = -1;
   int tickTock                      = TIMER_TICK;
 };
@@ -20,6 +19,8 @@ typedef struct Game {
   int phraseIndex        = 0;
   GameView *view         = new GameView();
 };
+
+volatile unsigned long lastDebounceMillis = 0;
 
 // Create the game.
 GameClock gameClock;
@@ -56,11 +57,11 @@ void clearEvents() {
 }
 
 void debounceHandler() {
-  unsigned long currentMicros = (long) micros();
+  unsigned long currentMillis = (long) millis();
   
-  if(currentMicros - gameClock.lastMicros >= TIMER_DEBOUNCE) {
+  if(currentMillis - lastDebounceMillis >= TIMER_DEBOUNCE) {
     handler();
-    gameClock.lastMicros = currentMicros;
+    lastDebounceMillis = currentMillis;
   } 
 }
 
