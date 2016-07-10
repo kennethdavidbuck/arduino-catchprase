@@ -62,6 +62,7 @@ void handler() {
 
 void transitionToStarted() {
   clearEvents();
+  lastSecond = millis();
   game.state = STATE_STARTED;
 }
 
@@ -152,7 +153,7 @@ void loop() {
     case STATE_STARTED:
       if(millis() - lastSecond > 1000) {
         playTeamOneSound();
-        lastSecond += 1000;
+        lastSecond = millis();
       }
         
       if(game.events[EVENT_STOP_START]) {
