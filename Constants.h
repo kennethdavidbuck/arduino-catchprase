@@ -1,5 +1,5 @@
 //
-#define DEBOUNCE_TIME         100000
+#define TIMER_DEBOUNCE        100000
 #define POINTS_WIN            7
 
 // interrupt pins

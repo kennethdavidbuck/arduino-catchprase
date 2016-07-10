@@ -43,7 +43,7 @@ void initializeInterrupt(int pin, int state) {
 void debounceHandler() {
   unsigned long currentMicros = (long) micros();
   
-  if(currentMicros - lastMicros >= DEBOUNCE_TIME) {
+  if(currentMicros - lastMicros >= TIMER_DEBOUNCE) {
     handler();
     lastMicros = currentMicros;
   }  
