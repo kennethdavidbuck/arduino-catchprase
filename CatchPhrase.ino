@@ -5,6 +5,7 @@
 #include "Pitches.h"
 
 const int PINS[5] = {PIN_TEAM_ONE, PIN_TEAM_TWO, PIN_CATEGORY, PIN_NEXT};
+const int PINS_LENGTH             = 4;
 volatile unsigned long lastMicros = 0;
 unsigned long lastMillis          = -1;
 int tickTock                      = 0;
@@ -35,14 +36,14 @@ void attachStopStartInterrupt() {
 }
 
 void attachInterrupts() {
-  for(int i = 0; i < 4; i += 1) {
+  for(int i = 0; i < PINS_LENGTH; i += 1) {
     attachInterrupt(digitalPinToInterrupt(PINS[i]), debounceHandler, LOW);
     pinMode(PINS[i], INPUT_PULLUP);
   }
 }
 
 void detachInterrupts() {
-  for(int i = 0; i < 4; i += 1) {
+  for(int i = 0; i < PINS_LENGTH; i += 1) {
     detachInterrupt(digitalPinToInterrupt(PINS[i]));
   }
 }
