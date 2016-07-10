@@ -25,10 +25,13 @@ Game game;
 
 void setup() {
   // we wont be toggling the stop/start pin, so we attach it here once.
+  attachStopStartInterrupt();
+  transitionToStopped();
+}
+
+void attachStopStartInterrupt() {
   attachInterrupt(digitalPinToInterrupt(PIN_STOP_START), debounceHandler, LOW);
   pinMode(PIN_STOP_START, INPUT_PULLUP);
-  
-  transitionToStopped();
 }
 
 void attachInterrupts() {
@@ -45,11 +48,9 @@ void detachInterrupts() {
 }
 
 void clearEvents() {
-  game.events[EVENT_TEAM_ONE_SCORE] = 0;
-  game.events[EVENT_TEAM_TWO_SCORE] = 0;
-  game.events[EVENT_CATEGORY]       = 0;
-  game.events[EVENT_STOP_START]     = 0;
-  game.events[EVENT_NEXT]           = 0;
+  for(int i = 0; i < 5; i += 1) {
+    game.events[i] = 0;
+  }
 }
 
 void debounceHandler() {

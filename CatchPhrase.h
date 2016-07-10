@@ -1,7 +1,11 @@
 #ifndef CATCH_PHRASE_H
 #define CATCH_PHRASE_H
 
+void attachStopStartInterrupt();
+
 void attachInterrupts();
+
+void detachInterrupts();
 
 void initializeInterrupt(int pin, int state);
 
