@@ -14,9 +14,10 @@
 #define PIN_SPEAKER           5
 
 // game sound notes
-#define NOTE_TEAM_ONE         NOTE_C5
-#define NOTE_TEAM_TWO         NOTE_CS5
-#define NOTE_CLOCK_LOW        NOTE_B5
+#define NOTE_TEAM_ONE         NOTE_C4
+#define NOTE_TEAM_TWO         NOTE_CS4
+#define NOTE_CLOCK_LOW        NOTE_C4
+#define NOTE_CLOCK_HIGH       NOTE_CS4
 
 // sound durations
 #define INCREMENT_DURATION    16

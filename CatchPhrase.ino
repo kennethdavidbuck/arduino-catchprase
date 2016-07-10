@@ -18,6 +18,7 @@ typedef struct Game {
 // Create the game.
 volatile unsigned long lastMicros = 0;
 unsigned long lastMillis          = -1;
+int tickTock                      = 0;
 
 Game game;
 
@@ -84,8 +85,12 @@ void playTeamTwoSound() {
   tone(PIN_SPEAKER, NOTE_TEAM_TWO, 1000 / INCREMENT_DURATION);
 }
 
-void playClockLowSound() {
+void playClockLow() {
   tone(PIN_SPEAKER, NOTE_CLOCK_LOW, 1000 / INCREMENT_DURATION);
+}
+
+void playClockHigh() {
+  tone(PIN_SPEAKER, NOTE_CLOCK_HIGH, 1000 / INCREMENT_DURATION);
 }
 
 void incrementTeamOneScore() {
@@ -128,9 +133,18 @@ bool startNewGame() {
 }
 
 void updateClock() {
-  if(lastMillis == -1 || millis() - lastMillis > 1000) {
+  unsigned long timeDifference = millis() - lastMillis;
+  
+  if(lastMillis == TIMER_NEW_ROUND || timeDifference > 500) {
+    if(tickTock == 0) {
+      tickTock = 1;
+      playClockLow();
+    } else {
+      tickTock = 0;
+      playClockHigh();
+    }
+    
     lastMillis = millis();
-    playClockLowSound();
   }
 }
 
