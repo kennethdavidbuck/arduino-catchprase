@@ -5,8 +5,8 @@
 #include "Pitches.h"
 
 typedef struct GameClock {
-  unsigned long lastMillis          = -1;
-  int tickTock                      = TIMER_TICK;
+  unsigned long lastMillis  = -1;
+  int tickTock              = TIMER_TICK;
 };
 
 typedef struct Game {
