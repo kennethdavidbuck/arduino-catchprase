@@ -3,10 +3,16 @@
 #include "Constants.h"
 #include "GameView.h"
 #include "Pitches.h"
+#include <SoftwareSerial.h>
+
+#define RX  15
+#define TX  16
+
+SoftwareSerial CatchPhrase(RX, TX); // RX, TX
 
 typedef struct GameClock {
-  unsigned long lastMillis  = -1;
-  int tickTock              = TIMER_TICK;
+  unsigned long lastMillis          = -1;
+  int tickTock                      = TIMER_TICK;
 };
 
 typedef struct Game {
@@ -28,6 +34,9 @@ Game game;
 
 void setup() {
   // we wont be toggling the stop/start pin, so we attach the interrupt here once.
+  CatchPhrase.begin(9600);
+  CatchPhrase.println("Engage!");
+  
   attachStopStartInterrupt();
   transitionToStopped();
 }
@@ -157,8 +166,10 @@ void updateClock() {
     if(gameClock.tickTock == TIMER_TICK) {
       gameClock.tickTock = TIMER_TOCK;
       playClockTick();
+      CatchPhrase.println("TICK ");
     } else {
       gameClock.tickTock = TIMER_TICK;
+      CatchPhrase.println("TOCK ");
       playClockTock();
     }
     
