@@ -35,7 +35,6 @@ Game game;
 void setup() {
   // we wont be toggling the stop/start pin, so we attach the interrupt here once.
   CatchPhrase.begin(9600);
-  CatchPhrase.println("Engage!");
   
   attachStopStartInterrupt();
   transitionToStopped();
