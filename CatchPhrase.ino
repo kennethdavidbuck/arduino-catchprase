@@ -8,11 +8,11 @@
 #define RX  15
 #define TX  16
 
-SoftwareSerial CatchPhrase(RX, TX); // RX, TX
+SoftwareSerial CatchPhrase(RX, TX);
 
 typedef struct GameClock {
-  unsigned long lastMillis          = -1;
-  int tickTock                      = TIMER_TICK;
+  unsigned long lastMillis = -1;
+  int tickTock             = TIMER_TICK;
 };
 
 typedef struct Game {
